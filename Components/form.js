@@ -2,11 +2,12 @@ import { useForm } from "react-hook-form";
 import * as React from 'react'
 import axios from 'axios';
 import Cssoutput from "./cssoutput";
-
+import {Button} from '@chakra-ui/react'
+import { FormControl,FormLabel,FormErrorMessage,Input } from "@chakra-ui/react";
 function Form() {
     const [data, setData] = React.useState("");
     const [bottom, setBottom] = React.useState(false);
-    const {register, handleSubmit, formState,reset} = useForm();
+    const {register, handleSubmit, formState,reset,} = useForm();
     const onSubmit = (data) => {
         
         setData(data.text);
@@ -35,6 +36,8 @@ function Form() {
         });
     }
 
+  
+
 
 
     return (
@@ -43,7 +46,7 @@ function Form() {
             <h1 className="text-2xl font-bold ">生成するオノマトペを入力</h1>
             <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col container items-center p-4">
                 <div className="bottom-2">
-                    <Input className="container border border-gray-500 bg-gray-900" id="Onomatope" placeholder="例:ザーザー"
+                    <Input className="container border border-gray-500" id="Onomatope" placeholder="例:ザーザー"
                 
                     {...register('text',{
                         required:true,
@@ -53,12 +56,13 @@ function Form() {
                     
                 </div>
                 {formState.errors.text && '1文字以上、20文字以下でなければなりません。' }
-                <button type="submit" disabled={!formState.isValid} className="bg-gray-300 rounded-lg p-8  hover:shadow-xl  hover:ring-4 ring-red-500 duration-200">送信</button>
+                <Button type="submit"  isLoading={formState.isSubmitting} disabled={!formState.isValid} className="bg-gray-300 mt-4 rounded-lg p-8  hover:shadow-xl  hover:ring-4 ring-red-500 duration-200">送信</Button>
                 
             </form>
             {bottom ?(
             <Cssoutput input_text = {data}/>
             ): null}
+            
 
             
 
