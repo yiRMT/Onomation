@@ -1,21 +1,45 @@
 import Image from 'next/image'
 import { Inter } from 'next/font/google'
 import * as React from 'react'
-import Home_onomation from '@/Components/home'
+import HomeLogo from '@/Components/home_logo'
 import { ChakraProvider } from '@chakra-ui/react'
 import Form from '@/Components/form'
 import Cssoutput from '@/Components/cssoutput'
-import bgp from '../assets/images/bgp.png'
 import Onogen from '@/Components/Card/Onogen'
-
+import { useEffect, useRef } from 'react';
 const inter = Inter({ subsets: ['latin'] })
 
 export default function Gen() {
+  const containerRef = useRef(null);
+
+  useEffect(() => {
+    const container = containerRef.current;
+    let position = -300;
+
+    const scrollBackground = () => {
+      position += 1;
+      container.style.top = `${position}px`;
+
+      if (position >= 0) {
+        position = -300;
+        container.style.transition = '0.1s ease-out';
+        container.style.top = `${position}px`;
+      } else {
+        container.style.transition = 'top 0.5s ease-out';
+      }
+
+      requestAnimationFrame(scrollBackground);
+    };
+
+    scrollBackground();
+
+    return () => cancelAnimationFrame(scrollBackground);
+  }, []);
+
   return (
-    <ChakraProvider>
     <main className='flex flex-col items-center justify-center' >
-      
-        <div className='-z-50'>
+      <div className="container">
+        <div ref={containerRef} className='-z-50 background-container'>
           <Image
             src = "/bgp1.png"
             alt = "bgp"
@@ -23,24 +47,10 @@ export default function Gen() {
             objectFit='cover'
           />
         </div>
-
-
-
-      
-
-      <section className="flex min-h-screen flex-col items-center justify-center p-24" >
-      <Form/>
-      
-      
-      </section>
-      
-
-
-
-
-    
-      
+        <section className="flex min-h-screen flex-col items-center justify-center p-24" >
+          <Form/>
+        </section>
+      </div>
     </main>
-    </ChakraProvider>
   )
 }
