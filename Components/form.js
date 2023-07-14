@@ -43,7 +43,11 @@ function Form() {
             <h1 className="text-2xl font-bold ">生成するオノマトペを入力</h1>
             <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col container items-center p-4">
                 <div className="bottom-2">
+<<<<<<< Updated upstream
                     <textarea className="container border border-gray-500" id="Onomatope" placeholder="例:ザーザー"
+=======
+                    <Input className="container border border-gray-500 bg-gray-900" id="Onomatope" placeholder="例:ザーザー"
+>>>>>>> Stashed changes
                 
                     {...register('text',{
                         required:true,
