@@ -1,11 +1,15 @@
-import { useEffect, useRef } from 'react';
 import Image from 'next/image'
+import { Inter } from 'next/font/google'
+import * as React from 'react'
 import HomeLogo from '@/Components/home_logo'
+import { ChakraProvider } from '@chakra-ui/react'
+import Form from '@/Components/form'
+import Cssoutput from '@/Components/cssoutput'
 import Onogen from '@/Components/Card/Onogen'
-import Onopost from '@/Components/Card/Onopost'
-import Onologin from '@/Components/Card/Onologin';
+import { useEffect, useRef } from 'react';
+const inter = Inter({ subsets: ['latin'] })
 
-export default function Home() {
+export default function Gen() {
   const containerRef = useRef(null);
 
   useEffect(() => {
@@ -33,24 +37,19 @@ export default function Home() {
   }, []);
 
   return (
-    <main className='flex flex-col items-center justify-center'>
+    <main className='flex flex-col items-center justify-center' >
       <div className="container">
         <div ref={containerRef} className='-z-50 background-container'>
           <Image
-            src="/bgp2.png"
-            alt="bgp"
+            src = "/bgp1.png"
+            alt = "bgp"
             layout='fill'
             objectFit='cover'
           />
         </div>
-        <div className="flex min-h-screen flex-col items-center justify-center">
-          <HomeLogo/>
-        </div>
-        <div className="flex gap-6 items-center justify-center my-20">
-          <Onogen />
-          <Onopost />
-          <Onologin />
-        </div>
+        <section className="flex min-h-screen flex-col items-center justify-center p-24" >
+          <Form/>
+        </section>
       </div>
     </main>
   )
