@@ -1,6 +1,6 @@
 import WorksCard from "./Card";
 import Link from "next/link";
-function Onogen() {
+function Onopost() {
   return (
     <>
       <span className="relative group">
@@ -30,14 +30,14 @@ function Onogen() {
             "pointer-events-none",
           ].join(" ")}
         >
-          入力されたテキストをもとにアニメーションを生成
+          投稿を見る
         </span>
-        <Link href="/gen">
-          <WorksCard title={"作ってみる"} />
+        <Link href="/posted">
+          <WorksCard title={"みんなの投稿"} />
         </Link>
       </span>
     </>
   );
 }
 
-export default Onogen;
+export default Onopost;
