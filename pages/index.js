@@ -6,14 +6,16 @@ import Home_onomation from '@/Components/home'
 import { ChakraProvider } from '@chakra-ui/react'
 import Form from '@/Components/form'
 import Cssoutput from '@/Components/cssoutput'
+import bgp from '../assets/images/bgp.png'
+
 const inter = Inter({ subsets: ['latin'] })
 
 export default function Home() {
   return (
     <ChakraProvider>
-    <main>
-      <section className="flex min-h-screen flex-col items-center justify-center p-24">
-      <Cssoutput/>
+    <main className='bg-gray-100' >
+      <section className="flex min-h-screen flex-col items-center justify-center p-24" style={{backgroundImage: `url(${bgp})`} }>
+      
       <Home_onomation/>
 
 
@@ -22,16 +24,13 @@ export default function Home() {
       
 
 
-      <section className="flex min-h-screen flex-col items-center justify-center p-24">
+      <section className="flex flex-col items-center justify-center p-24">
         <Form/>
 
 
       </section>
 
-      <section className="flex min-h-screen flex-col items-center justify-center p-24">
-
-        <Cssoutput/>
-      </section>
+    
       
       
     </main>
