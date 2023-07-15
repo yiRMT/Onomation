@@ -11,7 +11,7 @@ function Form() {
   const [js, setJs] = useState('')
   const [text, setText] = useState('')
 
-  const [data, setData] = useState("");
+  const [input_data, setData] = useState("");
   const {register, handleSubmit, formState,reset,} = useForm();
   const [onButton,setButton] = useState(false);
   const ontext = (text) => {
@@ -44,7 +44,7 @@ function Form() {
         "javascript": js
       },
       "comment": text.comment,
-      "originalText": text.text,
+      "originalText": input_data,
       "postDate": dateStr,
       "uid": uid,
       "displayName": authState.user.displayName,
@@ -55,6 +55,8 @@ function Form() {
       const uri = 'http://127.0.0.1:8000/api/v1/posts'
       const res = await axios.post(uri, posted_data)
       setText(text)
+      reset();
+      reset();
     } catch(error){
       console.log(error);
     }
@@ -69,8 +71,8 @@ function Form() {
       console.log(input_text)
       const uri = encodeURI(`http://127.0.0.1:8000/api/v1/gpt?text=${input_text}`)
       const res = await axios.post(uri)
-      reset();
       console.log(data)
+      setData(input_text)
       const resData = res.data
       setHtml(resData["html"])
       setCss(resData["css"])
