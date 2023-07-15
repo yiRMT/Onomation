@@ -1,8 +1,11 @@
 import { useForm } from "react-hook-form";
 import axios from 'axios';
-import {Button,Spinner} from '@chakra-ui/react'
+import { 
+  Button, Spinner, 
+  Modal, ModalBody, ModalCloseButton, ModalContent, ModalOverlay, ModalHeader, ModalFooter,
+  FormControl, FormLabel, FormErrorMessage, Input, Textarea
+} from '@chakra-ui/react'
 import React, { useContext, useState } from 'react'
-import { FormControl,FormLabel,FormErrorMessage,Input } from "@chakra-ui/react";
 import AuthContext from "@/libs/context/AuthContext";
 
 function Form() {
@@ -11,31 +14,44 @@ function Form() {
   const [js, setJs] = useState('')
   const [text, setText] = useState('')
 
-  const [data, setData] = useState("");
-  const {register, handleSubmit, formState,reset,} = useForm();
-  const [onButton,setButton] = useState(false);
+  const [postData, setPostData] = useState({
+    "animation": {
+      "html": "",
+      "css": "",
+      "javascript": ""
+    },
+    "comment": "",
+    "originalText": "",
+    "postDate": "",
+    "uid": "",
+    "displayName": "",
+  })
+
+  const [ data, setData ] = useState("");
+  const { register, handleSubmit, formState, reset } = useForm();
+  const [ openModal, setOpenModal ] = useState(false);
   const ontext = (text) => {
     setText(text);
     console.log(text);
-  } 
+  }
+
+  const [ isGenerated, setIsGenerated ] = useState(false);
+  const [ errorMessage, setErrorMessage ] = useState(null);
 
   const { authState, authDispatch } = useContext(AuthContext);
-
-  const onSubmit = (data) => {
-    setData(data.text);
-    reset();
-    setBottom(true);
-  };
-  const url = "http://localhost:5000";
+  
   const sampleData = {
-      css: `body { margin: 0; padding: 0; overflow: hidden; }  #rainContainer { width: 100%; height: 100vh; position: absolute; top: 0; left: 0; pointer-events: none; }  .drop { position: absolute; width: 2px; height: 120px; background-color: #0ff; opacity: 0.8; animation: dropFall linear infinite; }  @keyframes dropFall { 0% { transform: translateY(-100%) rotate(45deg); } 50% { transform: translateY(100vh) rotate(45deg); } 100% { transform: translateY(100vh) rotate(-45deg); } }`,
-      html: ' <!DOCTYPE html> <html> <head> <title>ザーザー雨のアニメーション</title> </head> <body> <div id="rainContainer"> <div class="drop"></div> </div>  <script src="script.js"></script> </body> </html>',
-      js: 'const numDrops = 150;  for (let i = 0; i < numDrops; i++) { createDrop(); }  function createDrop() { const drop = document.createElement("div"); drop.className = "drop"; drop.style.left = Math.random() * 100 + "%"; drop.style.animationDuration = Math.random() * 2 + 1 + "s"; drop.style.animationDelay = Math.random() * 2 + "s"; document.getElementById("rainContainer").appendChild(drop); }'
+    css: `body { margin: 0; padding: 0; overflow: hidden; }  #rainContainer { width: 100%; height: 100vh; position: absolute; top: 0; left: 0; pointer-events: none; }  .drop { position: absolute; width: 2px; height: 120px; background-color: #0ff; opacity: 0.8; animation: dropFall linear infinite; }  @keyframes dropFall { 0% { transform: translateY(-100%) rotate(45deg); } 50% { transform: translateY(100vh) rotate(45deg); } 100% { transform: translateY(100vh) rotate(-45deg); } }`,
+    html: ' <!DOCTYPE html> <html> <head> <title>ザーザー雨のアニメーション</title> </head> <body> <div id="rainContainer"> <div class="drop"></div> </div>  <script src="script.js"></script> </body> </html>',
+    js: 'const numDrops = 150;  for (let i = 0; i < numDrops; i++) { createDrop(); }  function createDrop() { const drop = document.createElement("div"); drop.className = "drop"; drop.style.left = Math.random() * 100 + "%"; drop.style.animationDuration = Math.random() * 2 + 1 + "s"; drop.style.animationDelay = Math.random() * 2 + "s"; document.getElementById("rainContainer").appendChild(drop); }'
   }
-  const Senddata = async (text) => {
+
+  const handleStoreDatabase = async (text) => {
+    console.log(text)
+
     const date = new Date();
     const dateStr = date.toISOString();
-    const uid = authState.user.uid
+    const uid = authState.user.uid;
 
     const posted_data = {
       "animation": {
@@ -49,23 +65,24 @@ function Form() {
       "uid": uid,
       "displayName": authState.user.displayName,
     }
-    console.log(posted_data)
     
     try{
       const uri = 'http://127.0.0.1:8000/api/v1/posts'
-      const res = await axios.post(uri, posted_data)
+      await axios.post(uri, posted_data)
       setText(text)
+      console.log('共有に成功しました！')
     } catch(error){
       console.log(error);
     }
   }
 
-  const handleClick = async (data) => {
+  const handleClickGenerate = async (data) => {
     try {
       const input_text = data.text
       setHtml("")
       setCss("")
       setJs("")
+      setErrorMessage(null)
       console.log(input_text)
       const uri = encodeURI(`http://127.0.0.1:8000/api/v1/gpt?text=${input_text}`)
       const res = await axios.post(uri)
@@ -80,112 +97,102 @@ function Form() {
       console.log(resData.javascript)
     } catch (error) {
       console.error(error);
+      setErrorMessage('生成に失敗しました')
     }
   }
 
   return (
     <>
-      <div className="flex flex-col  items-center justify-center bg-[#319795] rounded-xl">
-        
-        <form onSubmit={handleSubmit(handleClick)} className="flex flex-col container items-center p-4">
-        <h1 className="text-2xl font-semibold text-[#FFFFFF] mb-4">生成するオノマトペを入力</h1>
-          <div className="bottom-2">
-            <Input bg='#e7e5e4'  className="container border border-gray-900" id="Onomatope" color="#292524" placeholder="例:ザーザー"
-              {...register('text',{
-                  required:true,
-                  minLength:1,
-                  maxLength:20,
-              })}
-            />
-          </div>
-          {formState.errors.text ?(<p className="text-[#FFFFFF]">1文字以上、20文字以下でなければなりません</p> ):null}
-          <Button type="submit" bg="#FFFFFF" textColor="teal" size="lg" disabled={!formState.isValid}  isLoading={formState.isSubmitting} loadingText="生成中" className="text-[#35A29F] mt-4 rounded-lg p-8  hover:shadow-xl  hover:ring-4  duration-200">
-            送信
+      <div className="flex flex-col items-center justify-center bg-[#319795] rounded-xl">
+        <FormControl className="flex flex-col container items-center p-4">
+          <h1 className="text-2xl font-semibold text-[#FFFFFF] my-2">
+            生成するオノマトペを入力
+          </h1>
+          <Input bg='#e7e5e4'  className="container border border-gray-900 my-4" id="Onomatope" color="#292524" placeholder="例:ザーザー"
+            {...register('text',{
+              required:true,
+              minLength:1,
+              maxLength:20,
+            })}
+          />
+          { formState.errors.text ? (
+            <p className="text-[#FFFFFF]">
+              1文字以上、20文字以下でなければなりません
+            </p>
+          ) : null }
+          <Button type="submit" bg="#FFFFFF" textColor="teal" size="lg"
+            className="my-2"
+            disabled={!formState.isValid} isLoading={formState.isSubmitting}
+            onClick={handleSubmit(handleClickGenerate)}
+          >
+            生成
           </Button>
-        </form>
+        </FormControl>
       </div>
-        {formState.isSubmitting ? (
-            <Spinner className="mt-20"
-              thickness="4px"
-              speed="0.5s"
-              emptyColor="gray.200"
-              color="blue.500"
-              size="xl"/>
-          ):null}
-        {/*{bottom ? (
-          <Cssoutput input_text = {data}/>
-        ): 
-          null
-        }
-        */}
-
-      
+      {formState.isSubmitting ? (
+        <Spinner className="mt-20"
+          thickness="4px"
+          speed="0.5s"
+          emptyColor="gray.200"
+          color="blue.500"
+          size="xl"
+          label="生成中"
+        />
+      ) : null }
       <div className="mt-10">
-        
         <div dangerouslySetInnerHTML={{ __html: html }} />
-
         <script>{js}</script>
         <style>{css}</style>
       </div>
-      
-      {!html == "" ? (
-        <Button colorScheme="teal" size="lg" className="mt-10" onClick={() => setButton(true)} >
-          コメント
-        </Button>
-      ):
-      <p className="text-2xl font-semibold">ごめんなさい...生成できませんでした</p>
-      }
-      {onButton ? (
-          <div className='justify-center items-center flex flex-col  fixed inset-15 y-10 z-50 outline-none gap-4 bg-gray-100 rounded-xl'>
-            <form onSubmit={handleSubmit(Senddata)} className="flex flex-col container items-center p-4">
-                <Input bg='#e7e5e4'  className="container border border-gray-900" id="Onomatope" color="#292524" placeholder="コメント"
-                  {...register('comment',{
-                    required:true,
-                    minLength:1,
-                   maxLength:20,
+      { isGenerated ? (
+        !html == "" ? (
+          <Button colorScheme="teal" size="lg" className="mt-10" onClick={() => setOpenModal(true)} >
+            共有する
+          </Button>
+        ) : (
+          <p className="text-2xl font-semibold">
+            ごめんなさい...生成できませんでした
+          </p>
+        )
+      ) : null }
+
+      { errorMessage ? (
+        <p className="text-2xl font-semibold">
+          {errorMessage}
+        </p>
+      ) : null }
+      <Modal isOpen={openModal} onClose={() => setOpenModal(false)} size="xl" isCentered>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>あなたのオノメーションを共有する</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            <FormControl id="comment" isRequired>
+              <FormLabel>コメント</FormLabel>
+              <Textarea bg='#e7e5e4'  className="container border border-gray-900" id="Onomatope" color="#292524" placeholder="例:ザーザー" size="lg"
+                {...register('comment',{
+                  required:true,
+                  minLength:1,
+                  maxLength:20,
                 })}
               />
-            <Button type="submit" colorScheme="teal" size="lg" className="mt-10">
-              投稿
+              { formState.errors.comment ? (
+                <p className="text-[#FFFFFF]">
+                  1文字以上、20文字以下でなければなりません
+                </p>
+              ) : null }
+            </FormControl>
+          </ModalBody>
+          <ModalFooter>
+            <Button colorScheme="teal" mr={3} onClick={ handleSubmit(handleStoreDatabase) }>
+              共有する
             </Button>
-
-            </form>
-
-
-                      <button
-                        className="text-green-500 background-transparent font-bold uppercase px-2 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-200 hover:text-green-200 hover:scale-150 md:ml-auto"
-                        type="button"
-                        onClick={() => setButton(false)}
-                      >
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          className="icon icon-tabler icon-tabler-x"
-                          width="32"
-                          height="32"
-                          viewBox="0 0 24 24"
-                          strokewidth="2"
-                          stroke="currentColor"
-                          fill="none"
-                          strokelinecap="round"
-                          strokelinejoin="round"
-                        >
-                          <path
-                            stroke="none"
-                            d="M0 0h24v24H0z"
-                            fill="none"
-                          ></path>
-                          <path d="M18 6l-12 12"></path>
-                          <path d="M6 6l12 12"></path>
-                        </svg>
-                      </button>
-
-
-        </div>
-
-      
-      ):null}
-      
-
+            <Button variant="ghost" onClick={() => setOpenModal(false)}>
+              キャンセル
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
     </>
   );
 }
