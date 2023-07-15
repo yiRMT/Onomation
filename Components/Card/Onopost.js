@@ -1,10 +1,11 @@
 import Card from "./Card";
 import Link from "next/link";
-function Onopost() {
+
+const OnoPost = () => {
   return (
     <>
-      <span className="relative group">
-        <span
+      <div className="relative group">
+        <div
           className={[
             "whitespace-nowrap",
             "rounded",
@@ -31,13 +32,13 @@ function Onopost() {
           ].join(" ")}
         >
           投稿を見る
-        </span>
+        </div>
         <Link href="/posted">
           <Card title={"みんなの投稿"} />
         </Link>
-      </span>
+      </div>
     </>
   );
 }
 
-export default Onopost;
+export default OnoPost;

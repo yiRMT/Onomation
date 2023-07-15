@@ -1,13 +1,7 @@
 const initialState = {
   user: null,
-  info: {
-    groupMembers: {},
-  },
   isLoading: true,
-  userStatsLoading: true,
-  token: null,
   errorMessage: '',
-  isProfileStored: false,
 };
 
 const reducer = (state, action) => {
