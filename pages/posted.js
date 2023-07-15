@@ -7,6 +7,8 @@ import Form from '@/Components/form'
 import Cssoutput from '@/Components/cssoutput'
 import Onogen from '@/Components/Card/Onogen'
 import Posted_comp from '@/Components/Post/posted_component';
+import Link from 'next/link';
+import { Button ,ArrowLeftIcon } from '@chakra-ui/react';
 const inter = Inter({ subsets: ['latin'] })
 
 export default function Posted() {
@@ -66,6 +68,15 @@ export default function Posted() {
           layout='fill'
           objectFit='cover'
         />
+      </div>
+      <div className='absolute left-5 top-5'>
+          <Link href="/">
+            <button>
+              <ArrowLeftIcon w={8} h={8} color="Black" />
+
+
+            </button>
+          </Link>
       </div>
       <section className="flex min-h-screen flex-col items-center justify-center" >
         <Posted_comp posts={sample}/>
