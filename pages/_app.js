@@ -5,6 +5,7 @@ import AuthReducer from '@/libs/reducer/AuthReducer'
 import { useEffect, useReducer } from 'react'
 import { onAuthStateChanged } from 'firebase/auth'
 import { auth } from '@/firebase'
+import Footer from '@/Components/Footer'
 
 export default function App({ Component, pageProps }) {
   const [authState, authDispatch] = useReducer(AuthReducer.reducer, AuthReducer.initialState);
@@ -38,6 +39,7 @@ export default function App({ Component, pageProps }) {
     <AuthContext.Provider value={{authState, dispatch: authDispatch}}>
       <ChakraProvider>
         <Component {...pageProps} />
+        <Footer />
       </ChakraProvider>
     </AuthContext.Provider>
   )
