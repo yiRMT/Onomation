@@ -4,7 +4,7 @@ import Cssoutput from "./cssoutput";
 import {Button} from '@chakra-ui/react'
 import React, { useState } from 'react'
 import { FormControl,FormLabel,FormErrorMessage,Input } from "@chakra-ui/react";
-import Page from "./form_test";
+
 
 function Form() {
   const [css, setCss] = useState('{}')
@@ -28,7 +28,7 @@ function Form() {
   }
   const handleClick = async (data) => {
     try {
-      const uri = encodeURI(`http://127.0.0.1:8000?text=${data}`)
+      const uri = encodeURI(`http://127.0.0.1:8000/api/v1/gpt?text=${data}`)
       const res = await axios.post(uri)
       const resData = res.data
       setHtml(resData.html)
@@ -69,11 +69,13 @@ function Form() {
           null
         }
         */}
-              <div>
+
+      </div>
+      <div className="mt-10">
         <div dangerouslySetInnerHTML={{ __html: html }} />
+
         <script>{js}</script>
         <style>{css}</style>
-      </div>
       </div>
     </>
   );
