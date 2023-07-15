@@ -3,7 +3,7 @@ import Image from 'next/image'
 import HomeLogo from '@/Components/home_logo'
 import Onogen from '@/Components/Card/Onogen'
 import Onopost from '@/Components/Card/Onopost'
-import Onologin from '@/Components/Card/Onologin';
+import OnoSignIn from '@/Components/Card/OnoSignIn';
 
 export default function Home() {
   const containerRef = useRef(null);
@@ -49,7 +49,7 @@ export default function Home() {
         <div className="flex gap-6 items-center justify-center my-20">
           <Onogen />
           <Onopost />
-          <Onologin />
+          <OnoSignIn />
         </div>
       </div>
     </main>
