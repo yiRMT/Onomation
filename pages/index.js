@@ -2,10 +2,10 @@ import { useContext,useEffect, useRef } from 'react';
 import Image from 'next/image'
 import Head from 'next/head'
 import HomeLogo from '@/Components/HomeLogo'
-import OnoGen from '@/Components/Card/OnoGen'
-import OnoPost from '@/Components/Card/OnoPost'
-import OnoAuth from '@/Components/Card/OnoAuth';
-import AuthContext from "@/libs/context/AuthContext";
+import OnoGen from '../Components/Card/OnoGen'
+import OnoPost from '../Components/Card/OnoPost'
+import OnoAuth from '../Components/Card/OnoAuth';
+import AuthContext from "../libs/context/AuthContext";
 export default function Home() {
   const containerRef = useRef(null);
   const {authState, authDispatch} = useContext(AuthContext);

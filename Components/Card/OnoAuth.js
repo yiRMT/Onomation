@@ -1,8 +1,8 @@
 import Card from "./Card";
 import { signInWithPopup, signOut, GoogleAuthProvider } from "firebase/auth";
-import { auth } from "@/firebase";
+import { auth } from "../../firebase";
 import { useContext } from "react";
-import AuthContext from "@/libs/context/AuthContext";
+import AuthContext from "../../libs/context/AuthContext";
 
 const OnoAuth = () => {
   const {authState, authDispatch} = useContext(AuthContext);

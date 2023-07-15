@@ -4,8 +4,8 @@ import AuthContext from '@/libs/context/AuthContext'
 import AuthReducer from '@/libs/reducer/AuthReducer'
 import { useEffect, useReducer } from 'react'
 import { onAuthStateChanged } from 'firebase/auth'
-import { auth } from '@/firebase'
-import Footer from '@/Components/Footer'
+import { auth } from '../firebase'
+import Footer from '../Components/Footer'
 
 export default function App({ Component, pageProps }) {
   const [authState, authDispatch] = useReducer(AuthReducer.reducer, AuthReducer.initialState);

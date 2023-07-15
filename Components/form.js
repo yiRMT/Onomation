@@ -3,7 +3,7 @@ import axios from 'axios';
 import { Button, Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, Spinner, Textarea, CloseButton } from '@chakra-ui/react'
 import React, { useContext, useEffect, useState } from 'react'
 import { FormControl,FormLabel,FormErrorMessage,Input } from "@chakra-ui/react";
-import AuthContext from "@/libs/context/AuthContext";
+import AuthContext from "../libs/context/AuthContext";
 
 function Form() {
   const [css, setCss] = useState('{}')

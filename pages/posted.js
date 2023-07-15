@@ -3,7 +3,7 @@ import Head from 'next/head'
 import { Inter } from 'next/font/google'
 import * as React from 'react'
 import { useEffect, useRef } from 'react';
-import Post from '@/Components/Post';
+import Post from '../Components/Post';
 import Link from 'next/link';
 import axios from 'axios';
 import { ArrowLeftIcon } from '@chakra-ui/icons';
