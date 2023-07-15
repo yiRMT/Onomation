@@ -7,8 +7,9 @@ import Form from '@/Components/form'
 import Onogen from '@/Components/Card/Onogen'
 import Post from '@/Components/Post';
 import Link from 'next/link';
-import { Button } from '@chakra-ui/react';
+import axios from 'axios';
 import { ArrowLeftIcon } from '@chakra-ui/icons';
+
 const inter = Inter({ subsets: ['latin'] })
 
 export default function Posted() {
@@ -25,7 +26,8 @@ export default function Posted() {
     }
   }
 
-  const postsSample = [ sample,sample]
+  const postsSample = [ sample]
+  const [posts, setPosts] = React.useState([])
 
   const containerRef = useRef(null);
 
@@ -53,8 +55,23 @@ export default function Posted() {
     return () => cancelAnimationFrame(scrollBackground);
   }, []);
 
+  useEffect(() => {
+    get_posteddata()
+  }, [])
+
+  const get_posteddata = async () => {
+    try {
+      const url = 'http://127.0.0.1:8000/api/v1/posts'
+      const res = await axios.get(url)
+      setPosts(res.data)
+      console.log(res.data)
+    } catch (error) {
+      console.log(error);
+    }
+  }
   return (
     <main className='flex' >
+      
       <div ref={containerRef} className='-z-50 background-container'>
         <Image
           src = "/bgp2.png"
@@ -73,13 +90,14 @@ export default function Posted() {
       </div>
       <div className="mx-24 lg:mx-96 my-10 w-full" >
         <ul className='flex flex-col gap-5'>
-          {postsSample.map((post) => (
+          {posts.map((post) => (
             <li key={post.postDate}>
               <Post post={ post } />
             </li>
           ))}
         </ul>
       </div>
+      
     </main>
   )
 }

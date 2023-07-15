@@ -46,7 +46,8 @@ function Form() {
       "comment": text.comment,
       "originalText": text.text,
       "postDate": dateStr,
-      "uid": uid
+      "uid": uid,
+      "displayName": authState.user.displayName,
     }
     console.log(posted_data)
     
@@ -62,10 +63,13 @@ function Form() {
   const handleClick = async (data) => {
     try {
       const input_text = data.text
+      setHtml("")
+      setCss("")
+      setJs("")
       console.log(input_text)
       const uri = encodeURI(`http://127.0.0.1:8000/api/v1/gpt?text=${input_text}`)
       const res = await axios.post(uri)
-      
+      reset();
       console.log(data)
       const resData = res.data
       setHtml(resData["html"])
@@ -81,7 +85,7 @@ function Form() {
 
   return (
     <>
-      <div className="flex flex-col   justify-center bg-[#319795] rounded-xl">
+      <div className="flex flex-col  items-center justify-center bg-[#319795] rounded-xl">
         
         <form onSubmit={handleSubmit(handleClick)} className="flex flex-col container items-center p-4">
         <h1 className="text-2xl font-semibold text-[#FFFFFF] mb-4">生成するオノマトペを入力</h1>
@@ -95,12 +99,13 @@ function Form() {
             />
           </div>
           {formState.errors.text ?(<p className="text-[#FFFFFF]">1文字以上、20文字以下でなければなりません</p> ):null}
-          <Button type="submit" colorScheme="gray" size="lg" disabled={!formState.isValid} loadingText="送信中" className="text-[#FFFFFF] mt-4 rounded-lg p-8  hover:shadow-xl  hover:ring-4  duration-200">
+          <Button type="submit" bg="#FFFFFF" textColor="teal" size="lg" disabled={!formState.isValid}  isLoading={formState.isSubmitting} loadingText="生成中" className="text-[#35A29F] mt-4 rounded-lg p-8  hover:shadow-xl  hover:ring-4  duration-200">
             送信
           </Button>
         </form>
+      </div>
         {formState.isSubmitting ? (
-            <Spinner className="mt-15"
+            <Spinner className="mt-20"
               thickness="4px"
               speed="0.5s"
               emptyColor="gray.200"
@@ -114,18 +119,22 @@ function Form() {
         }
         */}
 
-      </div>
+      
       <div className="mt-10">
+        
         <div dangerouslySetInnerHTML={{ __html: html }} />
 
         <script>{js}</script>
         <style>{css}</style>
       </div>
-      {formState.isSubmitted ? (
+      
+      {!html == "" ? (
         <Button colorScheme="teal" size="lg" className="mt-10" onClick={() => setButton(true)} >
-          投稿
+          コメント
         </Button>
-      ):null}
+      ):
+      <p className="text-2xl font-semibold">ごめんなさい...生成できませんでした</p>
+      }
       {onButton ? (
           <div className='justify-center items-center flex flex-col  fixed inset-15 y-10 z-50 outline-none gap-4 bg-gray-100 rounded-xl'>
             <form onSubmit={handleSubmit(Senddata)} className="flex flex-col container items-center p-4">
@@ -137,7 +146,7 @@ function Form() {
                 })}
               />
             <Button type="submit" colorScheme="teal" size="lg" className="mt-10">
-              確定
+              投稿
             </Button>
 
             </form>
