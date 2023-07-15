@@ -1,9 +1,9 @@
 import { useForm } from "react-hook-form";
 import axios from 'axios';
 import {Button,Spinner} from '@chakra-ui/react'
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { FormControl,FormLabel,FormErrorMessage,Input } from "@chakra-ui/react";
-
+import AuthContext from "@/libs/context/AuthContext";
 
 function Form() {
   const [css, setCss] = useState('{}')
@@ -18,7 +18,9 @@ function Form() {
     setText(text);
     console.log(text);
   } 
-  
+
+  const { authState, authDispatch } = useContext(AuthContext);
+
   const onSubmit = (data) => {
     setData(data.text);
     reset();
@@ -30,35 +32,31 @@ function Form() {
       html: ' <!DOCTYPE html> <html> <head> <title>ザーザー雨のアニメーション</title> </head> <body> <div id="rainContainer"> <div class="drop"></div> </div>  <script src="script.js"></script> </body> </html>',
       js: 'const numDrops = 150;  for (let i = 0; i < numDrops; i++) { createDrop(); }  function createDrop() { const drop = document.createElement("div"); drop.className = "drop"; drop.style.left = Math.random() * 100 + "%"; drop.style.animationDuration = Math.random() * 2 + 1 + "s"; drop.style.animationDelay = Math.random() * 2 + "s"; document.getElementById("rainContainer").appendChild(drop); }'
   }
-  const Senddata = async (postdata) => {
+  const Senddata = async (text) => {
+    const date = new Date();
+    const dateStr = date.toISOString();
+    const uid = authState.user.uid
+
     const posted_data = {
-      "uid":"111",
-      "postDate":"2023",
-      "animation":{
-        "css":css,
-        "html":html,
-        "javascript":js
+      "animation": {
+        "html": html,
+        "css": css,
+        "javascript": js
       },
-      "originalText":postdata.text,
-      "comment":postdata.comment
+      "comment": text.comment,
+      "originalText": text.text,
+      "postDate": dateStr,
+      "uid": uid
     }
     console.log(posted_data)
     
-
     try{
-      const uri = `http://127.0.0.1:8000/api/v1/posts`
-      const data = JSON.stringify(posted_data)
-      const res = await axios.post(uri,data)
-      console.log(posted_data)
-
-
-
-    }catch(error){
+      const uri = 'http://127.0.0.1:8000/api/v1/posts'
+      const res = await axios.post(uri, posted_data)
+      setText(text)
+    } catch(error){
       console.log(error);
     }
-   
-
-    
   }
 
   const handleClick = async (data) => {
