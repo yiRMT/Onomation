@@ -56,6 +56,11 @@ export default function Gen() {
 
 
         </div>
+        <Link href="/">
+        <button>
+            <ArrowLeftIcon w={8} h={8} color="Black" />
+          </button>
+        </Link>
         <section className="flex min-h-screen flex-col items-center justify-center p-24" >
           <Form/>
 

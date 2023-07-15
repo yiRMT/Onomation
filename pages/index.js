@@ -1,12 +1,13 @@
-import { useEffect, useRef } from 'react';
+import { useContext,useEffect, useRef } from 'react';
 import Image from 'next/image'
 import HomeLogo from '@/Components/home_logo'
 import Onogen from '@/Components/Card/Onogen'
 import Onopost from '@/Components/Card/Onopost'
 import OnoSignIn from '@/Components/Card/OnoSignIn';
-
+import AuthContext from "@/libs/context/AuthContext";
 export default function Home() {
   const containerRef = useRef(null);
+  const {authState, authDispatch} = useContext(AuthContext);
 
   useEffect(() => {
     const container = containerRef.current;
@@ -46,6 +47,7 @@ export default function Home() {
         <div className="flex min-h-screen flex-col items-center justify-center">
           <HomeLogo/>
         </div>
+        {authState.user ? ( <p className='flex items-center justify-center'>{authState.user.displayName}</p>) :null}
         <div className="flex gap-6 items-center justify-center my-20">
           <Onogen />
           <Onopost />

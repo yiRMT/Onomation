@@ -14,6 +14,7 @@ function Form() {
   const [data, setData] = useState("");
   const {register, handleSubmit, formState,reset,} = useForm();
   const [onButton,setButton] = useState(false);
+  
   const onSubmit = (data) => {
     setData(data.text);
     reset();
@@ -25,14 +26,41 @@ function Form() {
       html: ' <!DOCTYPE html> <html> <head> <title>ザーザー雨のアニメーション</title> </head> <body> <div id="rainContainer"> <div class="drop"></div> </div>  <script src="script.js"></script> </body> </html>',
       js: 'const numDrops = 150;  for (let i = 0; i < numDrops; i++) { createDrop(); }  function createDrop() { const drop = document.createElement("div"); drop.className = "drop"; drop.style.left = Math.random() * 100 + "%"; drop.style.animationDuration = Math.random() * 2 + 1 + "s"; drop.style.animationDelay = Math.random() * 2 + "s"; document.getElementById("rainContainer").appendChild(drop); }'
   }
-  const Senddate = async (text) => {
-    console.log(text);
+  const Senddata = async (text) => {
+    const posted_data = {
+      "uid":"111",
+      "postData":"2023",
+      "animation":{
+        "css":css,
+        "html":html,
+        "js":js
+      },
+      "originalText":data,
+      "comment":text
+    }
+    
+
+    try{
+      const uri = `http://127.0.0.1:8000/api/v1/posts`
+      const data = JSON.stringify(posted_data)
+      const res = await axios.post(uri,data)
+      setText(text)
+
+
+
+    }catch(error){
+      console.log(error);
+    }
+   
+
+    
   }
 
   const handleClick = async (data) => {
     try {
       const uri = encodeURI(`http://127.0.0.1:8000/api/v1/gpt?text=${data}`)
       const res = await axios.post(uri)
+      setData(data)
       const resData = res.data
       setHtml(resData["html"])
       setCss(resData["css"])
@@ -88,13 +116,13 @@ function Form() {
         <style>{css}</style>
       </div>
       {formState.isSubmitted ? (
-        <Button colorScheme="teal" size="lg" className="mt-10" onClick={setButton(true)}>
+        <Button colorScheme="teal" size="lg" className="mt-10" onClick={() => setButton(true)} >
           投稿
         </Button>
       ):null}
       {onButton ? (
-          <div className='flex flex-col gap-4 p-4 bg-gray-100 hover:bg-gray-300 rounded-xl'>
-            <form onSubmit={handleSubmit(Senddate)} className="flex flex-col container items-center p-4">
+          <div className='justify-center items-center flex flex-col  fixed inset-15 y-10 z-50 outline-none gap-4 bg-gray-100 rounded-xl'>
+            <form onSubmit={handleSubmit(Senddata)} className="flex flex-col container items-center p-4">
                 <Input bg='#e7e5e4'  className="container border border-gray-900" id="Onomatope" color="#292524" placeholder="コメント"
                   {...register('text',{
                     required:true,
@@ -104,6 +132,36 @@ function Form() {
               />
 
             </form>
+            <Button colorScheme="teal" size="lg" className="mt-10" onClick={() => Senddata(text)} >
+              確定
+            </Button>
+
+                      <button
+                        className="text-green-500 background-transparent font-bold uppercase px-2 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-200 hover:text-green-200 hover:scale-150 md:ml-auto"
+                        type="button"
+                        onClick={() => setButton(false)}
+                      >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          className="icon icon-tabler icon-tabler-x"
+                          width="32"
+                          height="32"
+                          viewBox="0 0 24 24"
+                          strokewidth="2"
+                          stroke="currentColor"
+                          fill="none"
+                          strokelinecap="round"
+                          strokelinejoin="round"
+                        >
+                          <path
+                            stroke="none"
+                            d="M0 0h24v24H0z"
+                            fill="none"
+                          ></path>
+                          <path d="M18 6l-12 12"></path>
+                          <path d="M6 6l12 12"></path>
+                        </svg>
+                      </button>
 
 
         </div>

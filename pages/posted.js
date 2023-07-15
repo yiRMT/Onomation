@@ -25,7 +25,7 @@ export default function Posted() {
     }
   }
 
-  const postsSample = [ sample]
+  const postsSample = [ sample,sample]
 
   const containerRef = useRef(null);
 
