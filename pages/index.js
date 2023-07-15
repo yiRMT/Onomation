@@ -2,9 +2,9 @@ import { useContext,useEffect, useRef } from 'react';
 import Image from 'next/image'
 import Head from 'next/head'
 import HomeLogo from '@/Components/HomeLogo'
-import OnoGen from '../Components/Card/OnoGen'
-import OnoPost from '../Components/Card/OnoPost'
-import OnoAuth from '../Components/Card/OnoAuth';
+import GenCard from '../Components/Card/GenCard'
+import PostCard from '../Components/Card/PostCard'
+import AuthCard from '../Components/Card/AuthCard';
 import AuthContext from "../libs/context/AuthContext";
 export default function Home() {
   const containerRef = useRef(null);
@@ -55,9 +55,9 @@ export default function Home() {
             <HomeLogo/>
           </div>
           <div className="flex gap-6 items-center justify-center my-20">
-            <OnoGen />
-            <OnoPost />
-            <OnoAuth />
+            <GenCard />
+            <PostCard />
+            <AuthCard />
           </div>
         </div>
       </main>

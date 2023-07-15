@@ -4,7 +4,7 @@ import { auth } from "../../firebase";
 import { useContext } from "react";
 import AuthContext from "../../libs/context/AuthContext";
 
-const OnoAuth = () => {
+const AuthCard = () => {
   const {authState, authDispatch} = useContext(AuthContext);
 
   const provider = new GoogleAuthProvider();
@@ -67,4 +67,4 @@ const OnoAuth = () => {
   );
 }
 
-export default OnoAuth;
+export default AuthCard;

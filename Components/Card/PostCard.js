@@ -1,7 +1,7 @@
 import Card from "./Card";
 import Link from "next/link";
 
-const OnoGen = () => {
+const PostCard = () => {
   return (
     <>
       <div className="relative group">
@@ -31,14 +31,14 @@ const OnoGen = () => {
             "pointer-events-none",
           ].join(" ")}
         >
-          入力されたテキストをもとにアニメーションを生成
+          投稿を見る
         </div>
-        <Link href="/gen">
-          <Card title={"作ってみる"} />
+        <Link href="/posted">
+          <Card title={"みんなの投稿"} />
         </Link>
       </div>
     </>
   );
 }
 
-export default OnoGen;
+export default PostCard;
