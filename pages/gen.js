@@ -1,12 +1,13 @@
 import Image from 'next/image'
 import { Inter } from 'next/font/google'
+import Head from 'next/head'
 import * as React from 'react'
-import HomeLogo from '@/Components/home_logo'
-import { ChakraProvider } from '@chakra-ui/react'
-import Form from '@/Components/form'
-import Cssoutput from '@/Components/cssoutput'
-import Onogen from '@/Components/Card/Onogen'
+import Form from '../Components/form'
 import { useEffect, useRef } from 'react';
+import { Button } from '@chakra-ui/react'
+import { ArrowLeftIcon } from '@chakra-ui/icons'
+import Link from 'next/link'
+
 const inter = Inter({ subsets: ['latin'] })
 
 export default function Gen() {
@@ -37,20 +38,32 @@ export default function Gen() {
   }, []);
 
   return (
-    <main className='flex flex-col items-center justify-center' >
-      <div className="container">
-        <div ref={containerRef} className='-z-50 background-container'>
-          <Image
-            src = "/bgp1.png"
-            alt = "bgp"
-            layout='fill'
-            objectFit='cover'
-          />
+    <>
+      <Head>
+        <title>生成 - オノメーション</title>
+      </Head>
+      <main className='flex flex-col items-center justify-center' >
+        <div className="container">
+          <div ref={containerRef} className='-z-50 background-container'>
+            <Image
+              src = "/bgp2.png"
+              alt = "Background Image"
+              fill
+              style={{
+                objectFit: 'cover',
+              }}
+            />
+          </div>
+          <div className='absolute left-5 top-5'>
+            <Link href="/">
+              <ArrowLeftIcon w={8} h={8} color="Black" />
+            </Link>
+          </div>
+          <section className="flex min-h-screen flex-col items-center justify-center p-24" >
+            <Form/>
+          </section>
         </div>
-        <section className="flex min-h-screen flex-col items-center justify-center p-24" >
-          <Form/>
-        </section>
-      </div>
-    </main>
+      </main>
+    </>
   )
 }

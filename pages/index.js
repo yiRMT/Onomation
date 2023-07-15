@@ -1,12 +1,14 @@
-import { useEffect, useRef } from 'react';
+import { useContext,useEffect, useRef } from 'react';
 import Image from 'next/image'
-import HomeLogo from '@/Components/home_logo'
-import Onogen from '@/Components/Card/Onogen'
-import Onopost from '@/Components/Card/Onopost'
-import Onologin from '@/Components/Card/Onologin';
-
+import Head from 'next/head'
+import HomeLogo from '@/Components/HomeLogo'
+import GenCard from '../Components/Card/GenCard'
+import PostCard from '../Components/Card/PostCard'
+import AuthCard from '../Components/Card/AuthCard';
+import AuthContext from "../libs/context/AuthContext";
 export default function Home() {
   const containerRef = useRef(null);
+  const {authState, authDispatch} = useContext(AuthContext);
 
   useEffect(() => {
     const container = containerRef.current;
@@ -33,25 +35,32 @@ export default function Home() {
   }, []);
 
   return (
-    <main className='flex flex-col items-center justify-center'>
-      <div className="container">
-        <div ref={containerRef} className='-z-50 background-container'>
-          <Image
-            src="/bgp2.png"
-            alt="bgp"
-            layout='fill'
-            objectFit='cover'
-          />
+    <>
+      <Head>
+        <title>オノメーション</title>
+      </Head>
+      <main className='flex flex-col items-center justify-center'>
+        <div className="container">
+          <div ref={containerRef} className='-z-50 background-container'>
+            <Image
+              src="/bgp2.png"
+              alt="bgp"
+              fill
+              style={{
+                objectFit: 'cover',
+              }}
+            />
+          </div>
+          <div className="flex min-h-screen flex-col items-center justify-center">
+            <HomeLogo/>
+          </div>
+          <div className="flex gap-6 items-center justify-center my-20">
+            <GenCard />
+            <PostCard />
+            <AuthCard />
+          </div>
         </div>
-        <div className="flex min-h-screen flex-col items-center justify-center">
-          <HomeLogo/>
-        </div>
-        <div className="flex gap-6 items-center justify-center my-20">
-          <Onogen />
-          <Onopost />
-          <Onologin />
-        </div>
-      </div>
-    </main>
+      </main>
+    </>
   )
 }
