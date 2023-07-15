@@ -42,9 +42,7 @@ export default function Gen() {
 
   return (
     <main className='flex flex-col items-center justify-center' >
-      <header>
-
-      </header>
+      
       <div className="container">
         <div ref={containerRef} className='-z-50 background-container'>
           <Image
@@ -56,11 +54,12 @@ export default function Gen() {
         </div>
         <div className='absolute left-5 top-5'>
           <Link href="/">
-            <button >
+            <button>
               <ArrowLeftIcon w={8} h={8} color="Black" />
-
-
             </button>
+
+
+            
           </Link>
 
 

@@ -13,8 +13,8 @@ function Form() {
   const [text, setText] = useState('')
 
   const [data, setData] = useState("");
-  const [bottom, setBottom] = useState(false);
   const {register, handleSubmit, formState,reset,} = useForm();
+  const [onButton,setButton] = useState(false);
   const onSubmit = (data) => {
     setData(data.text);
     reset();
@@ -26,6 +26,10 @@ function Form() {
       html: ' <!DOCTYPE html> <html> <head> <title>ザーザー雨のアニメーション</title> </head> <body> <div id="rainContainer"> <div class="drop"></div> </div>  <script src="script.js"></script> </body> </html>',
       js: 'const numDrops = 150;  for (let i = 0; i < numDrops; i++) { createDrop(); }  function createDrop() { const drop = document.createElement("div"); drop.className = "drop"; drop.style.left = Math.random() * 100 + "%"; drop.style.animationDuration = Math.random() * 2 + 1 + "s"; drop.style.animationDelay = Math.random() * 2 + "s"; document.getElementById("rainContainer").appendChild(drop); }'
   }
+  const Senddate = async (text) => {
+    console.log(text);
+  }
+
   const handleClick = async (data) => {
     try {
       const uri = encodeURI(`http://127.0.0.1:8000/api/v1/gpt?text=${data}`)
@@ -44,7 +48,7 @@ function Form() {
 
   return (
     <>
-      <div className="flex flex-col   justify-center bg-[#319795]">
+      <div className="flex flex-col   justify-center bg-[#319795] rounded-xl">
         
         <form onSubmit={handleSubmit(handleClick)} className="flex flex-col container items-center p-4">
         <h1 className="text-2xl font-semibold text-[#FFFFFF] mb-4">生成するオノマトペを入力</h1>
@@ -58,11 +62,11 @@ function Form() {
             />
           </div>
           {formState.errors.text ?(<p className="text-[#FFFFFF]">1文字以上、20文字以下でなければなりません</p> ):null}
-          <Button type="submit" colorScheme="gray" size="lg" isLoading={formState.isSubmitting} disabled={!formState.isValid} loadingText="送信中" className="text-[#FFFFFF] mt-4 rounded-lg p-8  hover:shadow-xl  hover:ring-4  duration-200">
+          <Button type="submit" colorScheme="gray" size="lg" disabled={!formState.isValid} loadingText="送信中" className="text-[#FFFFFF] mt-4 rounded-lg p-8  hover:shadow-xl  hover:ring-4  duration-200">
             送信
           </Button>
-
-          {formState.isSubmitting ? (
+        </form>
+        {formState.isSubmitting ? (
             <Spinner className="mt-15"
               thickness="4px"
               speed="0.5s"
@@ -70,8 +74,6 @@ function Form() {
               color="blue.500"
               size="xl"/>
           ):null}
-        
-        </form>
         {/*{bottom ? (
           <Cssoutput input_text = {data}/>
         ): 
@@ -87,9 +89,27 @@ function Form() {
         <style>{css}</style>
       </div>
       {formState.isSubmitted ? (
-        <Button colorScheme="teal" size="lg" className="mt-10">
+        <Button colorScheme="teal" size="lg" className="mt-10" onClick={setButton(true)}>
           投稿
         </Button>
+      ):null}
+      {onButton ? (
+          <div className='flex flex-col gap-4 p-4 bg-gray-100 hover:bg-gray-300 rounded-xl'>
+            <form onSubmit={handleSubmit(Senddate)} className="flex flex-col container items-center p-4">
+                <Input bg='#e7e5e4'  className="container border border-gray-900" id="Onomatope" color="#292524" placeholder="コメント"
+                  {...register('text',{
+                    required:true,
+                    minLength:1,
+                   maxLength:20,
+                })}
+              />
+
+            </form>
+
+
+        </div>
+
+      
       ):null}
 
     </>

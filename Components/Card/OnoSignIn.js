@@ -71,9 +71,9 @@ const OnoSignIn = () => {
         >
           { authState.user ? "ログアウトする" : "Googleアカウントでログインする" }
         </span>
-        <button onClick={ handleSignIn }>
+        <div onClick={ handleSignIn }>
           <WorksCard title={ authState.user ? "ログアウト" : "ログイン" } />
-        </button>
+        </div>
       </span>
     </>
   );
