@@ -14,6 +14,10 @@ function Form() {
   const [data, setData] = useState("");
   const {register, handleSubmit, formState,reset,} = useForm();
   const [onButton,setButton] = useState(false);
+  const ontext = (text) => {
+    setText(text);
+    console.log(text);
+  } 
   
   const onSubmit = (data) => {
     setData(data.text);
@@ -26,25 +30,26 @@ function Form() {
       html: ' <!DOCTYPE html> <html> <head> <title>ザーザー雨のアニメーション</title> </head> <body> <div id="rainContainer"> <div class="drop"></div> </div>  <script src="script.js"></script> </body> </html>',
       js: 'const numDrops = 150;  for (let i = 0; i < numDrops; i++) { createDrop(); }  function createDrop() { const drop = document.createElement("div"); drop.className = "drop"; drop.style.left = Math.random() * 100 + "%"; drop.style.animationDuration = Math.random() * 2 + 1 + "s"; drop.style.animationDelay = Math.random() * 2 + "s"; document.getElementById("rainContainer").appendChild(drop); }'
   }
-  const Senddata = async (text) => {
+  const Senddata = async (postdata) => {
     const posted_data = {
       "uid":"111",
-      "postData":"2023",
+      "postDate":"2023",
       "animation":{
         "css":css,
         "html":html,
-        "js":js
+        "javascript":js
       },
-      "originalText":data,
-      "comment":text
+      "originalText":postdata.text,
+      "comment":postdata.comment
     }
+    console.log(posted_data)
     
 
     try{
       const uri = `http://127.0.0.1:8000/api/v1/posts`
       const data = JSON.stringify(posted_data)
       const res = await axios.post(uri,data)
-      setText(text)
+      console.log(posted_data)
 
 
 
@@ -58,9 +63,12 @@ function Form() {
 
   const handleClick = async (data) => {
     try {
-      const uri = encodeURI(`http://127.0.0.1:8000/api/v1/gpt?text=${data}`)
+      const input_text = data.text
+      console.log(input_text)
+      const uri = encodeURI(`http://127.0.0.1:8000/api/v1/gpt?text=${input_text}`)
       const res = await axios.post(uri)
-      setData(data)
+      
+      console.log(data)
       const resData = res.data
       setHtml(resData["html"])
       setCss(resData["css"])
@@ -124,17 +132,18 @@ function Form() {
           <div className='justify-center items-center flex flex-col  fixed inset-15 y-10 z-50 outline-none gap-4 bg-gray-100 rounded-xl'>
             <form onSubmit={handleSubmit(Senddata)} className="flex flex-col container items-center p-4">
                 <Input bg='#e7e5e4'  className="container border border-gray-900" id="Onomatope" color="#292524" placeholder="コメント"
-                  {...register('text',{
+                  {...register('comment',{
                     required:true,
                     minLength:1,
                    maxLength:20,
                 })}
               />
-
-            </form>
-            <Button colorScheme="teal" size="lg" className="mt-10" onClick={() => Senddata(text)} >
+            <Button type="submit" colorScheme="teal" size="lg" className="mt-10">
               確定
             </Button>
+
+            </form>
+
 
                       <button
                         className="text-green-500 background-transparent font-bold uppercase px-2 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-200 hover:text-green-200 hover:scale-150 md:ml-auto"
@@ -168,6 +177,7 @@ function Form() {
 
       
       ):null}
+      
 
     </>
   );
