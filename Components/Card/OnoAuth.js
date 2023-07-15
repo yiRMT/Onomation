@@ -1,10 +1,10 @@
 import Card from "./Card";
 import { signInWithPopup, signOut, GoogleAuthProvider } from "firebase/auth";
 import { auth } from "@/firebase";
-import { useContext, useEffect } from "react";
+import { useContext } from "react";
 import AuthContext from "@/libs/context/AuthContext";
 
-const OnoSignIn = () => {
+const OnoAuth = () => {
   const {authState, authDispatch} = useContext(AuthContext);
 
   const provider = new GoogleAuthProvider();
@@ -19,31 +19,19 @@ const OnoSignIn = () => {
     } else {
       try {
         const result = await signInWithPopup(auth, provider);
-        const credential = GoogleAuthProvider.credentialFromResult(result);
-        const token = credential.accessToken;
-        // The signed-in user info.
         const user = result.user;
-        // IdP data available using getAdditionalUserInfo(result)
-        // ...  
-        console.log(user);
+        console.log('ログインに成功しました uid: ', user.uid);
       } catch (error) {
         console.log(error);
-        // Handle Errors here.
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        // The email of the user's account used.
-        const email = error.customData.email;
-        // The AuthCredential type that was used.
-        const credential = GoogleAuthProvider.credentialFromError(error);
-        // ...
+        alert('認証に失敗しました');
       }
     }
   }
 
   return (
     <>
-      <span className="relative group">
-        <span
+      <div className="relative group">
+        <div
           className={[
             "whitespace-nowrap",
             "rounded",
@@ -70,13 +58,13 @@ const OnoSignIn = () => {
           ].join(" ")}
         >
           { authState.user ? "ログアウトする" : "Googleアカウントでログインする" }
-        </span>
+        </div>
         <div onClick={ handleSignIn }>
           <Card title={ authState.user ? "ログアウト" : "ログイン" } />
         </div>
-      </span>
+      </div>
     </>
   );
 }
 
-export default OnoSignIn;
+export default OnoAuth;

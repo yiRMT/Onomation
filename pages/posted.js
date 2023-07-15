@@ -2,9 +2,6 @@ import Image from 'next/image'
 import { Inter } from 'next/font/google'
 import * as React from 'react'
 import { useEffect, useRef } from 'react';
-import HomeLogo from '@/Components/home_logo'
-import Form from '@/Components/form'
-import Onogen from '@/Components/Card/Onogen'
 import Post from '@/Components/Post';
 import Link from 'next/link';
 import { Button } from '@chakra-ui/react';
@@ -25,7 +22,7 @@ export default function Posted() {
     }
   }
 
-  const postsSample = [ sample,sample]
+  const postsSample = [ sample ]
 
   const containerRef = useRef(null);
 
@@ -54,21 +51,20 @@ export default function Posted() {
   }, []);
 
   return (
-    <main className='flex' >
+    <main className='flex min-h-screen' >
       <div ref={containerRef} className='-z-50 background-container'>
         <Image
           src = "/bgp2.png"
           alt = "bgp"
-          layout='fill'
-          objectFit='cover'
+          fill
+          style={{
+            objectFit: 'cover',
+          }}
         />
       </div>
       <div className='absolute left-5 top-5'>
         <Link href="/">
-          
-          <button>
-            <ArrowLeftIcon w={8} h={8} color="Black" />
-          </button>
+          <ArrowLeftIcon w={8} h={8} color="Black" />
         </Link>
       </div>
       <div className="mx-24 lg:mx-96 my-10 w-full" >

@@ -1,10 +1,11 @@
 import Card from "./Card";
 import Link from "next/link";
-function Onogen() {
+
+const OnoGen = () => {
   return (
     <>
-      <span className="relative group">
-        <span
+      <div className="relative group">
+        <div
           className={[
             "whitespace-nowrap",
             "rounded",
@@ -31,13 +32,13 @@ function Onogen() {
           ].join(" ")}
         >
           入力されたテキストをもとにアニメーションを生成
-        </span>
+        </div>
         <Link href="/gen">
           <Card title={"作ってみる"} />
         </Link>
-      </span>
+      </div>
     </>
   );
 }
 
-export default Onogen;
+export default OnoGen;
