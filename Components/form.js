@@ -1,7 +1,7 @@
 import { useForm } from "react-hook-form";
 import axios from 'axios';
 import Cssoutput from "./cssoutput";
-import {Button} from '@chakra-ui/react'
+import {Button,Spinner} from '@chakra-ui/react'
 import React, { useState } from 'react'
 import { FormControl,FormLabel,FormErrorMessage,Input } from "@chakra-ui/react";
 
@@ -44,10 +44,10 @@ function Form() {
 
   return (
     <>
-      <div className="flex flex-col   justify-center bg-[#292524]">
+      <div className="flex flex-col   justify-center bg-[#319795]">
         
         <form onSubmit={handleSubmit(handleClick)} className="flex flex-col container items-center p-4">
-        <h1 className="text-2xl font-semibold text-[#DBC086] mb-4">生成するオノマトペを入力</h1>
+        <h1 className="text-2xl font-semibold text-[#FFFFFF] mb-4">生成するオノマトペを入力</h1>
           <div className="bottom-2">
             <Input bg='#e7e5e4'  className="container border border-gray-900" id="Onomatope" color="#292524" placeholder="例:ザーザー"
               {...register('text',{
@@ -57,10 +57,19 @@ function Form() {
               })}
             />
           </div>
-          {formState.errors.text ?(<p className="text-[#DBC086]">1文字以上、20文字以下でなければなりません</p> ):null}
-          <Button type="submit" bg='#DBC086' isLoading={formState.isSubmitting} disabled={!formState.isValid} loadingText="送信中" className="mt-4 rounded-lg p-8  hover:shadow-xl  hover:ring-4  duration-200">
+          {formState.errors.text ?(<p className="text-[#FFFFFF]">1文字以上、20文字以下でなければなりません</p> ):null}
+          <Button type="submit" colorScheme="gray" size="lg" isLoading={formState.isSubmitting} disabled={!formState.isValid} loadingText="送信中" className="text-[#FFFFFF] mt-4 rounded-lg p-8  hover:shadow-xl  hover:ring-4  duration-200">
             送信
           </Button>
+
+          {formState.isSubmitting ? (
+            <Spinner className="mt-15"
+              thickness="4px"
+              speed="0.5s"
+              emptyColor="gray.200"
+              color="blue.500"
+              size="xl"/>
+          ):null}
         
         </form>
         {/*{bottom ? (
@@ -77,6 +86,12 @@ function Form() {
         <script>{js}</script>
         <style>{css}</style>
       </div>
+      {formState.isSubmitted ? (
+        <Button colorScheme="teal" size="lg" className="mt-10">
+          投稿
+        </Button>
+      ):null}
+
     </>
   );
 }
