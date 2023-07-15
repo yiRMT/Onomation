@@ -1,9 +1,9 @@
 import { useContext,useEffect, useRef } from 'react';
 import Image from 'next/image'
-import HomeLogo from '@/Components/home_logo'
-import Onogen from '@/Components/Card/Onogen'
-import Onopost from '@/Components/Card/Onopost'
-import OnoSignIn from '@/Components/Card/OnoSignIn';
+import HomeLogo from '@/Components/HomeLogo'
+import OnoGen from '@/Components/Card/OnoGen'
+import OnoPost from '@/Components/Card/OnoPost'
+import OnoAuth from '@/Components/Card/OnoAuth';
 import AuthContext from "@/libs/context/AuthContext";
 export default function Home() {
   const containerRef = useRef(null);
@@ -40,18 +40,19 @@ export default function Home() {
           <Image
             src="/bgp2.png"
             alt="bgp"
-            layout='fill'
-            objectFit='cover'
+            fill
+            style={{
+              objectFit: 'cover',
+            }}
           />
         </div>
         <div className="flex min-h-screen flex-col items-center justify-center">
           <HomeLogo/>
         </div>
-        {authState.user ? ( <p className='flex items-center justify-center'>{authState.user.displayName}</p>) :null}
         <div className="flex gap-6 items-center justify-center my-20">
-          <Onogen />
-          <Onopost />
-          <OnoSignIn />
+          <OnoGen />
+          <OnoPost />
+          <OnoAuth />
         </div>
       </div>
     </main>

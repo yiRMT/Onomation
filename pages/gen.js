@@ -1,10 +1,7 @@
 import Image from 'next/image'
 import { Inter } from 'next/font/google'
 import * as React from 'react'
-import HomeLogo from '@/Components/home_logo'
-import { ChakraProvider } from '@chakra-ui/react'
 import Form from '@/Components/form'
-import Onogen from '@/Components/Card/Onogen'
 import { useEffect, useRef } from 'react';
 import { Button } from '@chakra-ui/react'
 import { ArrowLeftIcon } from '@chakra-ui/icons'
@@ -46,26 +43,20 @@ export default function Gen() {
         <div ref={containerRef} className='-z-50 background-container'>
           <Image
             src = "/bgp2.png"
-            alt = "bgp"
-            layout='fill'
-            objectFit='cover'
+            alt = "Background Image"
+            fill
+            style={{
+              objectFit: 'cover',
+            }}
           />
         </div>
         <div className='absolute left-5 top-5'>
-          
-
-
-        </div>
         <Link href="/">
-        <button>
-            <ArrowLeftIcon w={8} h={8} color="Black" />
-          </button>
+          <ArrowLeftIcon w={8} h={8} color="Black" />
         </Link>
+        </div>
         <section className="flex min-h-screen flex-col items-center justify-center p-24" >
           <Form/>
-
-
-
         </section>
       </div>
     </main>
