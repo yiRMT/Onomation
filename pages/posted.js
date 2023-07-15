@@ -8,7 +8,7 @@ import Cssoutput from '@/Components/cssoutput'
 import Onogen from '@/Components/Card/Onogen'
 import Post from '@/Components/Post';
 import Link from 'next/link';
-import { Button  } from '@chakra-ui/react';
+import { Button } from '@chakra-ui/react';
 import { ArrowLeftIcon } from '@chakra-ui/icons';
 const inter = Inter({ subsets: ['latin'] })
 
@@ -68,12 +68,10 @@ export default function Posted() {
           <Link href="/">
             <button>
               <ArrowLeftIcon w={8} h={8} color="Black" />
-
-
             </button>
           </Link>
       </div>
-      <div className="mx-96 my-10 w-full" >
+      <div className="mx-24 lg:mx-96 my-10 w-full" >
         <ul className='flex flex-col gap-5'>
           {postsSample.map((post) => (
             <li key={post.postDate}>
