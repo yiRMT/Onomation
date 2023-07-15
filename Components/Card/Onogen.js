@@ -1,4 +1,4 @@
-import WorksCard from "./Card";
+import Card from "./Card";
 import Link from "next/link";
 function Onogen() {
   return (
@@ -33,7 +33,7 @@ function Onogen() {
           入力されたテキストをもとにアニメーションを生成
         </span>
         <Link href="/gen">
-          <WorksCard title={"作ってみる"} />
+          <Card title={"作ってみる"} />
         </Link>
       </span>
     </>

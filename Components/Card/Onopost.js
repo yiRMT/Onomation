@@ -1,4 +1,4 @@
-import WorksCard from "./Card";
+import Card from "./Card";
 import Link from "next/link";
 function Onopost() {
   return (
@@ -33,7 +33,7 @@ function Onopost() {
           投稿を見る
         </span>
         <Link href="/posted">
-          <WorksCard title={"みんなの投稿"} />
+          <Card title={"みんなの投稿"} />
         </Link>
       </span>
     </>

@@ -1,6 +1,5 @@
 import { useForm } from "react-hook-form";
 import axios from 'axios';
-import Cssoutput from "./cssoutput";
 import {Button,Spinner} from '@chakra-ui/react'
 import React, { useState } from 'react'
 import { FormControl,FormLabel,FormErrorMessage,Input } from "@chakra-ui/react";
@@ -31,9 +30,9 @@ function Form() {
       const uri = encodeURI(`http://127.0.0.1:8000/api/v1/gpt?text=${data}`)
       const res = await axios.post(uri)
       const resData = res.data
-      setHtml(resData.html)
-      setCss(resData.css)
-      setJs(resData.javascript)
+      setHtml(resData["html"])
+      setCss(resData["css"])
+      setJs(resData["javascript"])
       console.log(resData.html)
       console.log(resData.css)
       console.log(resData.javascript)
