@@ -4,7 +4,6 @@ import * as React from 'react'
 import HomeLogo from '@/Components/home_logo'
 import { ChakraProvider } from '@chakra-ui/react'
 import Form from '@/Components/form'
-import Cssoutput from '@/Components/cssoutput'
 import Onogen from '@/Components/Card/Onogen'
 import { useEffect, useRef } from 'react';
 import { Button } from '@chakra-ui/react'
@@ -53,14 +52,7 @@ export default function Gen() {
           />
         </div>
         <div className='absolute left-5 top-5'>
-          <Link href="/">
-            <button>
-              <ArrowLeftIcon w={8} h={8} color="Black" />
-            </button>
-
-
-            
-          </Link>
+          
 
 
         </div>

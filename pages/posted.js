@@ -4,7 +4,6 @@ import * as React from 'react'
 import { useEffect, useRef } from 'react';
 import HomeLogo from '@/Components/home_logo'
 import Form from '@/Components/form'
-import Cssoutput from '@/Components/cssoutput'
 import Onogen from '@/Components/Card/Onogen'
 import Post from '@/Components/Post';
 import Link from 'next/link';
@@ -65,11 +64,12 @@ export default function Posted() {
         />
       </div>
       <div className='absolute left-5 top-5'>
-          <Link href="/">
-            <button>
-              <ArrowLeftIcon w={8} h={8} color="Black" />
-            </button>
-          </Link>
+        <Link href="/">
+          
+          <button>
+            <ArrowLeftIcon w={8} h={8} color="Black" />
+          </button>
+        </Link>
       </div>
       <div className="mx-24 lg:mx-96 my-10 w-full" >
         <ul className='flex flex-col gap-5'>

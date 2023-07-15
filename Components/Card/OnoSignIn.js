@@ -1,4 +1,4 @@
-import WorksCard from "./Card";
+import Card from "./Card";
 import { signInWithPopup, signOut, GoogleAuthProvider } from "firebase/auth";
 import { auth } from "@/firebase";
 import { useContext, useEffect } from "react";
@@ -72,7 +72,7 @@ const OnoSignIn = () => {
           { authState.user ? "ログアウトする" : "Googleアカウントでログインする" }
         </span>
         <div onClick={ handleSignIn }>
-          <WorksCard title={ authState.user ? "ログアウト" : "ログイン" } />
+          <Card title={ authState.user ? "ログアウト" : "ログイン" } />
         </div>
       </span>
     </>
