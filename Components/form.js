@@ -1,12 +1,19 @@
 import { useForm } from "react-hook-form";
-import * as React from 'react'
 import axios from 'axios';
 import Cssoutput from "./cssoutput";
 import {Button} from '@chakra-ui/react'
+import React, { useState } from 'react'
 import { FormControl,FormLabel,FormErrorMessage,Input } from "@chakra-ui/react";
+import Page from "./form_test";
+
 function Form() {
-  const [data, setData] = React.useState("");
-  const [bottom, setBottom] = React.useState(false);
+  const [css, setCss] = useState('{}')
+  const [html, setHtml] = useState('')
+  const [js, setJs] = useState('')
+  const [text, setText] = useState('')
+
+  const [data, setData] = useState("");
+  const [bottom, setBottom] = useState(false);
   const {register, handleSubmit, formState,reset,} = useForm();
   const onSubmit = (data) => {
     setData(data.text);
@@ -19,25 +26,30 @@ function Form() {
       html: ' <!DOCTYPE html> <html> <head> <title>ザーザー雨のアニメーション</title> </head> <body> <div id="rainContainer"> <div class="drop"></div> </div>  <script src="script.js"></script> </body> </html>',
       js: 'const numDrops = 150;  for (let i = 0; i < numDrops; i++) { createDrop(); }  function createDrop() { const drop = document.createElement("div"); drop.className = "drop"; drop.style.left = Math.random() * 100 + "%"; drop.style.animationDuration = Math.random() * 2 + 1 + "s"; drop.style.animationDelay = Math.random() * 2 + "s"; document.getElementById("rainContainer").appendChild(drop); }'
   }
-  const text_submit = (data) => {
-    axios.post(url, {
-      text: data.text
-    })
-    .then((res) => {
-      console.log(res.data);
-    })
-    .catch((err) => {
-      console.error(err);
-    });
+  const handleClick = async (data) => {
+    try {
+      const uri = encodeURI(`http://127.0.0.1:8000?text=${data}`)
+      const res = await axios.post(uri)
+      const resData = res.data
+      setHtml(resData.html)
+      setCss(resData.css)
+      setJs(resData.javascript)
+      console.log(resData.html)
+      console.log(resData.css)
+      console.log(resData.javascript)
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   return (
     <>
-      <div className="flex flex-col container items-center ">
-        <h1 className="text-2xl font-bold ">生成するオノマトペを入力</h1>
-        <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col container items-center p-4">
+      <div className="flex flex-col   justify-center bg-[#292524]">
+        
+        <form onSubmit={handleSubmit(handleClick)} className="flex flex-col container items-center p-4">
+        <h1 className="text-2xl font-semibold text-[#DBC086] mb-4">生成するオノマトペを入力</h1>
           <div className="bottom-2">
-            <Input className="container border border-gray-500" id="Onomatope" placeholder="例:ザーザー"
+            <Input bg='#e7e5e4'  className="container border border-gray-900" id="Onomatope" color="#292524" placeholder="例:ザーザー"
               {...register('text',{
                   required:true,
                   minLength:1,
@@ -45,16 +57,23 @@ function Form() {
               })}
             />
           </div>
-          {formState.errors.text && '1文字以上、20文字以下でなければなりません。' }
-          <Button type="submit"  isLoading={formState.isSubmitting} disabled={!formState.isValid} className="bg-gray-300 mt-4 rounded-lg p-8  hover:shadow-xl  hover:ring-4 ring-red-500 duration-200">
+          {formState.errors.text ?(<p className="text-[#DBC086]">1文字以上、20文字以下でなければなりません</p> ):null}
+          <Button type="submit" bg='#DBC086' isLoading={formState.isSubmitting} disabled={!formState.isValid} loadingText="送信中" className="mt-4 rounded-lg p-8  hover:shadow-xl  hover:ring-4  duration-200">
             送信
           </Button>
+        
         </form>
-        {bottom ? (
+        {/*{bottom ? (
           <Cssoutput input_text = {data}/>
         ): 
           null
         }
+        */}
+              <div>
+        <div dangerouslySetInnerHTML={{ __html: html }} />
+        <script>{js}</script>
+        <style>{css}</style>
+      </div>
       </div>
     </>
   );

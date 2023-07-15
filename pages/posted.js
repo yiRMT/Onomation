@@ -13,7 +13,7 @@ export default function Gen() {
     <main className='flex flex-col items-center justify-center' >
       <div className='-z-50'>
         <Image
-          src = "/bgp1.png"
+          src = "/bgp2.png"
           alt = "bgp"
           layout='fill'
           objectFit='cover'
