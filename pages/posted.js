@@ -1,4 +1,5 @@
 import Image from 'next/image'
+import Head from 'next/head'
 import { Inter } from 'next/font/google'
 import * as React from 'react'
 import { useEffect, useRef } from 'react';
@@ -67,32 +68,37 @@ export default function Posted() {
     }
   }
   return (
-    <main className='flex min-h-screen' >
-      <div ref={containerRef} className='-z-50 background-container'>
-        <Image
-          src = "/bgp2.png"
-          alt = "bgp"
-          fill
-          style={{
-            objectFit: 'cover',
-          }}
-        />
-      </div>
-      <div className='absolute left-5 top-5'>
-        <Link href="/">
-          <ArrowLeftIcon w={8} h={8} color="Black" />
-        </Link>
-      </div>
-      <div className="mx-24 lg:mx-96 my-10 w-full" >
-        <ul className='flex flex-col gap-5'>
-          {posts.map((post) => (
-            <li key={post.postDate}>
-              <Post post={ post } />
-            </li>
-          ))}
-        </ul>
-      </div>
-      
-    </main>
+    <>
+      <Head>
+        <title>投稿 - オノメーション</title>
+      </Head>
+      <main className='flex min-h-screen' >
+        <div ref={containerRef} className='-z-50 background-container'>
+          <Image
+            src = "/bgp2.png"
+            alt = "bgp"
+            fill
+            style={{
+              objectFit: 'cover',
+            }}
+          />
+        </div>
+        <div className='absolute left-5 top-5'>
+          <Link href="/">
+            <ArrowLeftIcon w={8} h={8} color="Black" />
+          </Link>
+        </div>
+        <div className="mx-96 my-20 w-full" >
+          <ul className='flex flex-col gap-5'>
+            {posts.map((post) => (
+              <li key={post.postDate}>
+                <Post post={ post } />
+              </li>
+            ))}
+          </ul>
+        </div>
+        
+      </main>
+    </>
   )
 }

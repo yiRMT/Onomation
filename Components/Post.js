@@ -17,17 +17,19 @@ export default function Post ({ post }) {
     )
   }
 
+  const dateStr = new Date(post.postDate).toLocaleString('ja-JP', { timeZone: 'Asia/Tokyo' })
+
   return (
     <>
-      <div className='flex flex-col gap-4 p-4 bg-gray-100 hover:bg-gray-300 rounded-xl'>
-        <div className='flex justify-center p-10 rounded-xl w-full drop-shadow bg-white'>
+      <div className='flex flex-col gap-4 p-4 bg-gray-100 rounded-xl shadow-md'>
+        <div className='flex justify-center p-10 rounded-xl w-full bg-white'>
           <Animation {...post.animation} />
         </div>
         <div className='p-2'>
-          <h1 className='font-bold sm:text-lg text-base'>{post.original_text}</h1>
-          <p>日付: {post.postDate}</p>
-          <p>コメント: {post.comment}</p>
+          <h1 className='font-bold text-xl'>{post.originalText}</h1>
           <p>投稿者: {post.displayName}</p>
+          <p>投稿日時: {dateStr}</p>
+          <p>コメント: {post.comment}</p>
         </div>
       </div>
     </>

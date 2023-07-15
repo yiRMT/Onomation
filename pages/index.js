@@ -1,5 +1,6 @@
 import { useContext,useEffect, useRef } from 'react';
 import Image from 'next/image'
+import Head from 'next/head'
 import HomeLogo from '@/Components/HomeLogo'
 import OnoGen from '@/Components/Card/OnoGen'
 import OnoPost from '@/Components/Card/OnoPost'
@@ -34,27 +35,32 @@ export default function Home() {
   }, []);
 
   return (
-    <main className='flex flex-col items-center justify-center'>
-      <div className="container">
-        <div ref={containerRef} className='-z-50 background-container'>
-          <Image
-            src="/bgp2.png"
-            alt="bgp"
-            fill
-            style={{
-              objectFit: 'cover',
-            }}
-          />
+    <>
+      <Head>
+        <title>オノメーション</title>
+      </Head>
+      <main className='flex flex-col items-center justify-center'>
+        <div className="container">
+          <div ref={containerRef} className='-z-50 background-container'>
+            <Image
+              src="/bgp2.png"
+              alt="bgp"
+              fill
+              style={{
+                objectFit: 'cover',
+              }}
+            />
+          </div>
+          <div className="flex min-h-screen flex-col items-center justify-center">
+            <HomeLogo/>
+          </div>
+          <div className="flex gap-6 items-center justify-center my-20">
+            <OnoGen />
+            <OnoPost />
+            <OnoAuth />
+          </div>
         </div>
-        <div className="flex min-h-screen flex-col items-center justify-center">
-          <HomeLogo/>
-        </div>
-        <div className="flex gap-6 items-center justify-center my-20">
-          <OnoGen />
-          <OnoPost />
-          <OnoAuth />
-        </div>
-      </div>
-    </main>
+      </main>
+    </>
   )
 }
