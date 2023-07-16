@@ -18,7 +18,7 @@ function Form() {
   const { authState, authDispatch } = useContext(AuthContext);
 
   const [isGenerated, setIsGenerated] = useState(false);
-  const [errorMessage, setErrorMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState(null);
 
   const url = "http://localhost:5000";
   const sampleData = {
@@ -39,7 +39,7 @@ function Form() {
         "javascript": js
       },
       "comment": text.comment,
-      "originalText": input_data,
+      "originalText": text.text,
       "postDate": dateStr,
       "uid": uid,
       "displayName": authState.user.displayName,
@@ -65,11 +65,11 @@ function Form() {
       setCss("")
       setJs("")
       setIsGenerated(false);
+      setErrorMessage(null);
       console.log(input_text)
       const uri = encodeURI(`http://127.0.0.1:8000/api/v1/gpt?text=${input_text}`)
       const res = await axios.post(uri)
       console.log(data)
-      setData(input_text)
       const resData = res.data
       setHtml(resData["html"])
       setCss(resData["css"])
@@ -112,7 +112,7 @@ function Form() {
 
       { isGenerated ? (
         <>
-          <div className="m-10">
+          <div className="m-10 p-10">
             <div dangerouslySetInnerHTML={{ __html: html }} />
             <script>{js}</script>
             <style>{css}</style>

@@ -46,7 +46,7 @@ export default function Gen() {
         <div className="container">
           <div ref={containerRef} className='-z-50 background-container'>
             <Image
-              src = "/bgp2.png"
+              src="/bgp.svg"
               alt = "Background Image"
               fill
               style={{

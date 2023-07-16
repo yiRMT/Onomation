@@ -57,6 +57,12 @@ export default function Posted() {
     get_posteddata()
   }, [])
 
+  const sortedPosts = posts.sort((a, b) => {
+    if (a.postDate < b.postDate) return 1
+    if (a.postDate > b.postDate) return -1
+    return 0
+  })
+
   const get_posteddata = async () => {
     try {
       const url = 'http://127.0.0.1:8000/api/v1/posts'
@@ -90,7 +96,7 @@ export default function Posted() {
         </div>
         <div className="mx-96 my-20 w-full" >
           <ul className='flex flex-col gap-5'>
-            {posts.map((post) => (
+            {sortedPosts.map((post) => (
               <li key={post.postDate}>
                 <Post post={ post } />
               </li>
