@@ -4,8 +4,8 @@ function HomeLogo() {
   return(
     <>
       <Image
-        className="relative"
-        src="/image/Onomation.png"
+        className="relative p-4"
+        src="/onomation.svg"
         alt="Onomation Logo"
         width={700}
         height={700}

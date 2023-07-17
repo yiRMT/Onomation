@@ -16,13 +16,12 @@ export default function App({ Component, pageProps }) {
       authDispatch({type: 'isLoading', payload: {isLoading: true}})
       if (user) {
         (async () => {
-          const uid = user.uid;
-          console.log('User signed in: ', uid);
+          console.log('認証状態: サインイン');
           authDispatch({type: 'isLoading', payload: {isLoading: false}})
           authDispatch({type: 'signIn', payload: {user: user}});
         })();
       } else {
-        console.log('No user');
+        console.log('認証状態: サインアウト');
         authDispatch({type: 'signOut'});
         authDispatch({type: 'isLoading', payload: {isLoading: false}});
       }

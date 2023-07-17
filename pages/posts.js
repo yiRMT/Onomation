@@ -57,6 +57,12 @@ export default function Posted() {
     get_posteddata()
   }, [])
 
+  const sortedPosts = posts.sort((a, b) => {
+    if (a.postDate < b.postDate) return 1
+    if (a.postDate > b.postDate) return -1
+    return 0
+  })
+
   const get_posteddata = async () => {
     try {
       const url = 'http://127.0.0.1:8000/api/v1/posts'
@@ -64,6 +70,7 @@ export default function Posted() {
       setPosts(res.data)
       console.log(res.data)
     } catch (error) {
+      alert('投稿データの取得に失敗しました')
       console.log(error);
     }
   }
@@ -75,7 +82,7 @@ export default function Posted() {
       <main className='flex min-h-screen' >
         <div ref={containerRef} className='-z-50 background-container'>
           <Image
-            src = "/bgp2.png"
+            src = "/bgp.png"
             alt = "bgp"
             fill
             style={{
@@ -88,15 +95,13 @@ export default function Posted() {
             <ArrowLeftIcon w={8} h={8} color="Black" />
           </Link>
         </div>
-        <div className="mx-96 my-20 w-full" >
-          <ul className='flex flex-col gap-5'>
-            {posts.map((post) => (
-              <li key={post.postDate}>
-                <Post post={ post } />
-              </li>
-            ))}
-          </ul>
-        </div>
+        <ul className='flex flex-col mx-10 md:mx-16 lg:mx-32 xl:mx-64 my-20 w-full gap-5'>
+          {sortedPosts.map((post) => (
+            <li key={post.postDate} >
+              <Post post={ post } />
+            </li>
+          ))}
+        </ul>
         
       </main>
     </>

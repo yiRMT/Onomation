@@ -5,6 +5,7 @@ const PostCard = () => {
   return (
     <>
       <div className="relative group">
+        {/*
         <div
           className={[
             "whitespace-nowrap",
@@ -33,7 +34,8 @@ const PostCard = () => {
         >
           投稿を見る
         </div>
-        <Link href="/posted">
+        */}
+        <Link href="/posts">
           <Card title={"みんなの投稿"} />
         </Link>
       </div>

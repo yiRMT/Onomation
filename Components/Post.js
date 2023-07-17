@@ -22,7 +22,7 @@ export default function Post ({ post }) {
   return (
     <>
       <div className='flex flex-col gap-4 p-4 bg-gray-100 rounded-xl shadow-md'>
-        <div className='flex justify-center p-10 rounded-xl w-full bg-white'>
+        <div className='flex justify-center py-8 rounded-xl w-full bg-white'>
           <Animation {...post.animation} />
         </div>
         <div className='p-2'>

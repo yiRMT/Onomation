@@ -6,6 +6,7 @@ import GenCard from '../Components/Card/GenCard'
 import PostCard from '../Components/Card/PostCard'
 import AuthCard from '../Components/Card/AuthCard';
 import AuthContext from "../libs/context/AuthContext";
+import { ChevronDownIcon } from '@chakra-ui/icons'
 export default function Home() {
   const containerRef = useRef(null);
   const {authState, authDispatch} = useContext(AuthContext);
@@ -43,7 +44,7 @@ export default function Home() {
         <div className="container">
           <div ref={containerRef} className='-z-50 background-container'>
             <Image
-              src="/bgp2.png"
+              src="/bgp.svg"
               alt="bgp"
               fill
               style={{
