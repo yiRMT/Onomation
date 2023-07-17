@@ -1,4 +1,4 @@
-import '@/styles/globals.css'
+import '../styles/globals.css'
 import { ChakraProvider } from '@chakra-ui/react'
 import AuthContext from '@/libs/context/AuthContext'
 import AuthReducer from '@/libs/reducer/AuthReducer'
