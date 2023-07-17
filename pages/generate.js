@@ -2,9 +2,8 @@ import Image from 'next/image'
 import { Inter } from 'next/font/google'
 import Head from 'next/head'
 import * as React from 'react'
-import Form from '../Components/Form'
+import Form from '../Components/GenForm'
 import { useEffect, useRef } from 'react';
-import { Button } from '@chakra-ui/react'
 import { ArrowLeftIcon } from '@chakra-ui/icons'
 import Link from 'next/link'
 
