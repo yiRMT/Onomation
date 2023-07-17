@@ -6,6 +6,7 @@ import { useEffect, useReducer } from 'react'
 import { onAuthStateChanged } from 'firebase/auth'
 import { auth } from '../firebase'
 import Footer from '../Components/Footer'
+import * as React from 'react'
 
 export default function App({ Component, pageProps }) {
   const [authState, authDispatch] = useReducer(AuthReducer.reducer, AuthReducer.initialState);
