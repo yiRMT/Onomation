@@ -31,6 +31,7 @@ const AuthCard = () => {
   return (
     <>
       <div className="relative group">
+        {/*
         <div
           className={[
             "whitespace-nowrap",
@@ -59,8 +60,9 @@ const AuthCard = () => {
         >
           { authState.user ? "ログアウトする" : "Googleアカウントでログインする" }
         </div>
+        */}
         <div onClick={ handleSignIn }>
-          <Card title={ authState.user ? "ログアウト" : "ログイン" } />
+          <Card title={ authState.user ? "ログアウト" : "ログイン" } isLoading={authState.isLoading} />
         </div>
       </div>
     </>

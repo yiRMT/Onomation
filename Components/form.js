@@ -1,24 +1,34 @@
-import { useForm } from "react-hook-form";
+import { set, useForm } from "react-hook-form";
 import axios from 'axios';
-import { Button, Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, Spinner, Textarea, CloseButton } from '@chakra-ui/react'
+import { Button, Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, Spinner, Textarea, CloseButton, InputGroup, InputRightElement, IconButton } from '@chakra-ui/react'
 import React, { useContext, useEffect, useState } from 'react'
-import { FormControl,FormLabel,FormErrorMessage,Input } from "@chakra-ui/react";
+import { FormControl, FormLabel, FormErrorMessage,Input, FormHelperText } from "@chakra-ui/react";
 import AuthContext from "../libs/context/AuthContext";
+import { auth } from "@/firebase";
+import { CloseIcon } from "@chakra-ui/icons";
 
 function Form() {
   const [css, setCss] = useState('{}')
   const [html, setHtml] = useState('')
   const [js, setJs] = useState('')
-
   const [originalText, setOriginalText] = useState('')
-  const [comment, setComment] = useState("");
-  const { register, handleSubmit, formState, reset } = useForm();
-  const [ openModal, setOpenModal ] = useState(false);
+  const [comment, setComment] = useState('')
+  const [postData, setPostData] = useState({});
+  const [generationErrorMessage, setGenerationErrorMessage] = useState('');
+  const [commentErrorMessage, setCommentErrorMessage] = useState('');
+
+  const [openAIAPIKey, setOpenAIAPIKey] = useState('');
+
+  const [isGenerating, setIsGenerating] = useState(false);
+  const [isSubmittingComment, setIsSubmittingComment] = useState(false);
+  const [openModal, setOpenModal] = useState(false);
+  const [isGenerated, setIsGenerated] = useState(false);
+  const [showAPIKey, setShowAPIKey] = React.useState(false)
+
+  const isGenerationError = generationErrorMessage !== '';
+  const isCommentError = commentErrorMessage !== '';
 
   const { authState, authDispatch } = useContext(AuthContext);
-
-  const [isGenerated, setIsGenerated] = useState(false);
-  const [errorMessage, setErrorMessage] = useState(null);
 
   const url = "http://localhost:5000";
   const sampleData = {
@@ -27,87 +37,134 @@ function Form() {
       js: 'const numDrops = 150;  for (let i = 0; i < numDrops; i++) { createDrop(); }  function createDrop() { const drop = document.createElement("div"); drop.className = "drop"; drop.style.left = Math.random() * 100 + "%"; drop.style.animationDuration = Math.random() * 2 + 1 + "s"; drop.style.animationDelay = Math.random() * 2 + "s"; document.getElementById("rainContainer").appendChild(drop); }'
   }
 
-  const handleStoreDatabase = async (text) => {
+  useEffect(() => {
+    const localOpenAIAPIKey = localStorage.getItem('openai_api_key');
+    if (localOpenAIAPIKey !== '' && localOpenAIAPIKey !== null) {
+      setOpenAIAPIKey(localOpenAIAPIKey);
+    }
+  }, [])
+
+  const handleStoreDatabase = async () => {
     const date = new Date();
     const dateStr = date.toISOString();
-    const uid = authState.user.uid
 
-    const posted_data = {
-      "animation": {
-        "html": html,
-        "css": css,
-        "javascript": js
-      },
-      "comment": text.comment,
-      "originalText": text.text,
-      "postDate": dateStr,
-      "uid": uid,
-      "displayName": authState.user.displayName,
-    }
-    console.log(posted_data)
+    setPostData({
+      ...postData,
+      'comment': comment,
+      'postDate': dateStr,
+      'uid': authState.user.uid,
+      'displayName': authState.user.displayName,
+    })
     
-    try{
+    try {
       const uri = 'http://127.0.0.1:8000/api/v1/posts'
-      await axios.post(uri, posted_data)
-      reset();
-    } catch(error){
+      const idToken = await auth.currentUser.getIdToken(true)
+      console.log(postData);
+      await axios.post(uri, { 
+        'data': postData,
+        'authData': {
+          'firebaseIdToken': idToken
+        }
+      })
+      alert('投稿しました！');
+      setComment('');
+    } catch (error) {
+      alert('投稿に失敗しました...');
       console.log(error);
-      reset();
     }
-
     setOpenModal(false);
   }
 
-  const handleGenerateOnomation = async (data) => {
+  const handleGenerateOnomation = async () => {
     try {
-      const input_text = data.text
-      setHtml("")
-      setCss("")
-      setJs("")
+      // 初期化
+      setPostData({})
+      setHtml('')
+      setCss('')
+      setJs('')
       setIsGenerated(false);
-      setErrorMessage(null);
-      console.log(input_text)
-      const uri = encodeURI(`http://127.0.0.1:8000/api/v1/gpt?text=${input_text}`)
-      const res = await axios.post(uri)
-      console.log(data)
-      const resData = res.data
-      setHtml(resData["html"])
-      setCss(resData["css"])
-      setJs(resData["javascript"])
+
+      setIsGenerating(true);
+
+      localStorage.setItem('openai_api_key', openAIAPIKey);
+
+      const uri = encodeURI(`http://127.0.0.1:8000/api/v1/gpt?text=${originalText}`)
+      const res = await axios.post(uri, {
+        openai_api_key: openAIAPIKey
+      })
+
+      setPostData({
+        'originalText': originalText,
+        'animation': {
+          'html': res.data['html'],
+          'css': res.data['css'],
+          'javascript': res.data['javascript']
+        },
+      })
+      setHtml(res.data['html'])
+      setCss(res.data['css'])
+      setJs(res.data['javascript'])
+      
       setIsGenerated(true);
-      console.log(resData.html)
-      console.log(resData.css)
-      console.log(resData.javascript)
+      setIsGenerating(false);
     } catch (error) {
       console.error(error);
-      setErrorMessage("ごめんなさい...生成できませんでした...")
-      reset();
+      alert('ごめんなさい...生成できませんでした...')
+      setIsGenerating(false);
+      setIsGenerated(false);
+      setOriginalText('');
     }
   }
 
   return (
     <>
-      <div className="flex flex-col  items-center justify-center bg-[#319795] rounded-xl">
-        <form onSubmit={handleSubmit(handleGenerateOnomation)} className="flex flex-col container items-center p-4">
-        <h1 className="text-2xl font-semibold text-[#FFFFFF] mb-4">生成するオノマトペを入力</h1>
-          <div className="bottom-2">
-            <Input bg='#e7e5e4'  className="container border border-gray-900" id="Onomatope" color="#292524" placeholder="例:ザーザー"
-              {...register('text',{
-                required:true,
-                minLength:1,
-                maxLength:20,
-              })}
+      <div className="flex flex-col items-center justify-center bg-[#319795] rounded-xl w-4/6">
+        <FormControl isRequired className="flex flex-col container p-4" isInvalid={isGenerationError} >
+          <h1 className="text-2xl font-semibold text-[#FFFFFF] mb-4 text-center">オノメーションを生成</h1>
+          <div className="my-2">
+            <FormLabel className="text-white">オノマトペ</FormLabel>
+            <Input bg='#e7e5e4'  className="" id="Onomatope" color="#292524" placeholder="オノマトペを入力"
+              onChange={(e) => { setOriginalText(e.target.value) }} value={originalText}
             />
+            { isGenerationError ? (
+              <FormErrorMessage>
+                オノマトペを入力してください
+              </FormErrorMessage>
+            ) : (
+              <FormHelperText color='white'>
+                例: ザーザー
+              </FormHelperText>
+            ) }
           </div>
-          {formState.errors.text ?(
-            <p className="text-[#FFFFFF]">
-              1文字以上、20文字以下でなければなりません
-            </p>
-          ) : null }
-          <Button type="submit" bg="#FFFFFF" textColor="teal" size="lg" isLoading={formState.isSubmitting} loadingText="生成中" className="text-[#35A29F] mt-4 rounded-lg hover:shadow-xl  hover:ring-4  duration-200">
+          <div className="my-2">
+            <FormLabel className="text-white">OpenAI API Key</FormLabel>
+            <InputGroup size='md'>
+              <Input bg='#e7e5e4'  className="" id="Onomatope" color="#292524" placeholder="OpenAI API Keyを入力" type={showAPIKey ? 'text' : 'password'}
+                onChange={(e) => { setOpenAIAPIKey(e.target.value) }} value={openAIAPIKey}
+              />
+              <InputRightElement width='4.5rem'>
+                <Button h='1.75rem' size='sm' onClick={() => setShowAPIKey(!showAPIKey)}>
+                  {showAPIKey ? 'Hide' : 'Show'}
+                </Button>
+              </InputRightElement>
+            </InputGroup>
+            { isGenerationError ? (
+              <FormErrorMessage>
+                OpenAI API Keyを入力してください
+              </FormErrorMessage>
+            ) : (
+              <FormHelperText color='white'>
+                {'本ウェブサイトではOpenAI API Keyをあなたのブラウザに保存し、サーバーには保存しません。ただし、外部サーバーに送信しますのでご了承ください。'}
+              </FormHelperText>
+            ) }
+          </div>
+          <Button type="submit" bg="#FFFFFF" textColor="teal" size="lg" className="text-[#35A29F] mt-4 rounded-lg hover:shadow-xl  hover:ring-4  duration-200" 
+            loadingText="生成中" isLoading={isGenerating}
+            isActive={isGenerationError} onClick={handleGenerateOnomation}
+          >
             生成する
           </Button>
-        </form>
+        </FormControl>
       </div>
 
       { isGenerated ? (
@@ -119,39 +176,41 @@ function Form() {
           </div>
           { authState.user ? (
             <>
-              <Button colorScheme="teal" size="lg" className="mt-10" onClick={() => setOpenModal(true)} >
+              <Button colorScheme="teal" size="lg" className="mt-10" onClick={() => { setOpenModal(true) }} >
                 共有する
               </Button>
-              { openModal ? (
-                <div className='justify-center items-center flex flex-col fixed inset-15 y-10 z-50 outline-none bg-gray-100 rounded-xl w-96'>
-                  <form onSubmit={handleSubmit(handleStoreDatabase)} className="flex flex-col container items-center p-4 gap-4">
-                    <Textarea bg='#e7e5e4'  className=" border border-gray-900" id="Onomatope" color="#292524" placeholder="コメント"
-                      {...register('comment',{
-                        required:false,
-                        minLength:1,
-                        maxLength:20,
-                      })}
-                    />
-                    <div className="flex flex-row justify-center gap-4">
-                      <Button type="submit" colorScheme="teal" size="lg" className="" disabled={!formState.isValid} isLoading={formState.isSubmitting}>
-                        共有する
-                      </Button>
-                      <Button colorScheme="gray" size="lg" className="" onClick={() => setOpenModal(false)} >
-                        閉じる
-                      </Button>
-                    </div>
-                  </form>
-                </div>
-              ) : null }
+              <Modal isOpen={openModal} onClose={() => setOpenModal(false)} >
+                <ModalOverlay />
+                <ModalContent className="self-center">
+                  <ModalHeader>共有する</ModalHeader>
+                  <ModalCloseButton />
+                  <ModalBody>
+                    <FormControl id="Onomatope_Comment" className="flex flex-col container items-center gap-4" isRequired isInvalid={isCommentError} >
+                      <Textarea bg='#e7e5e4'  className=" border border-gray-900" id="Onomatope" color="#292524" placeholder="コメント"
+                        onChange={(e) => { setComment(e.target.value) }} value={comment}
+                      />
+                      { isCommentError ? (
+                        <FormErrorMessage>
+                          コメントを入力してください
+                        </FormErrorMessage>
+                      ) : null }
+                      <div className="flex flex-row justify-center gap-4 m-4">
+                        <Button type="submit" colorScheme="teal" size="lg" className="" 
+                          loadingText='投稿中' isLoading={isSubmittingComment} onClick={() => {handleStoreDatabase()}}
+                        >
+                          共有する
+                        </Button>
+                        <Button colorScheme="gray" size="lg" className="" onClick={() => setOpenModal(false)} >
+                          閉じる
+                        </Button>
+                      </div>
+                    </FormControl>
+                  </ModalBody>
+                </ModalContent>
+              </Modal>
             </>
           ) : null }
         </>
-      ) : null }
-      
-      { errorMessage ? (
-        <p className="text-2xl m-10 font-semibold">
-          {errorMessage}
-        </p>
       ) : null }
     </>
   );

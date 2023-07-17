@@ -1,10 +1,15 @@
+import Link from "next/link"
+
 const Footer = () => {
   return (
     <footer>
-      <div className="py-4 flex flex-col items-center">
+      <div className="flex gap-4 pb-10 justify-center">
         <p>
           © 2023 Onomation. All Rights Reserved.
         </p>
+        <Link href="/privacy-policy" className="hover:underline">
+          プライバシーポリシー
+        </Link>
       </div>
     </footer>
   )

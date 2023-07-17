@@ -5,6 +5,7 @@ const GenCard = () => {
   return (
     <>
       <div className="relative group">
+        {/*
         <div
           className={[
             "whitespace-nowrap",
@@ -33,7 +34,8 @@ const GenCard = () => {
         >
           入力されたテキストをもとにアニメーションを生成
         </div>
-        <Link href="/gen">
+        */}
+        <Link href="/generate">
           <Card title={"作ってみる"} />
         </Link>
       </div>

@@ -94,15 +94,13 @@ export default function Posted() {
             <ArrowLeftIcon w={8} h={8} color="Black" />
           </Link>
         </div>
-        <div className="mx-96 my-20 w-full" >
-          <ul className='flex flex-col gap-5'>
-            {sortedPosts.map((post) => (
-              <li key={post.postDate}>
-                <Post post={ post } />
-              </li>
-            ))}
-          </ul>
-        </div>
+        <ul className='flex flex-col mx-10 md:mx-16 lg:mx-32 xl:mx-64 my-20 w-full gap-5'>
+          {sortedPosts.map((post) => (
+            <li key={post.postDate} >
+              <Post post={ post } />
+            </li>
+          ))}
+        </ul>
         
       </main>
     </>
