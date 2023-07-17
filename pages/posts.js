@@ -70,6 +70,7 @@ export default function Posted() {
       setPosts(res.data)
       console.log(res.data)
     } catch (error) {
+      alert('投稿データの取得に失敗しました')
       console.log(error);
     }
   }
@@ -81,7 +82,7 @@ export default function Posted() {
       <main className='flex min-h-screen' >
         <div ref={containerRef} className='-z-50 background-container'>
           <Image
-            src = "/bgp2.png"
+            src = "/bgp.png"
             alt = "bgp"
             fill
             style={{
