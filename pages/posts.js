@@ -65,7 +65,7 @@ export default function Posted() {
 
   const get_posteddata = async () => {
     try {
-      const url = 'http://127.0.0.1:8000/api/v1/posts'
+      const url = 'https://onomation.onrender.com/api/v1/posts'
       const res = await axios.get(url)
       setPosts(res.data)
       console.log(res.data)

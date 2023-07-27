@@ -30,7 +30,7 @@ function Form() {
 
   const { authState, authDispatch } = useContext(AuthContext);
 
-  const url = "http://localhost:5000";
+  const url = "https://onomation.onrender.com/";
   const sampleData = {
       css: `body { margin: 0; padding: 0; overflow: hidden; }  #rainContainer { width: 100%; height: 100vh; position: absolute; top: 0; left: 0; pointer-events: none; }  .drop { position: absolute; width: 2px; height: 120px; background-color: #0ff; opacity: 0.8; animation: dropFall linear infinite; }  @keyframes dropFall { 0% { transform: translateY(-100%) rotate(45deg); } 50% { transform: translateY(100vh) rotate(45deg); } 100% { transform: translateY(100vh) rotate(-45deg); } }`,
       html: ' <!DOCTYPE html> <html> <head> <title>ザーザー雨のアニメーション</title> </head> <body> <div id="rainContainer"> <div class="drop"></div> </div>  <script src="script.js"></script> </body> </html>',
@@ -57,7 +57,7 @@ function Form() {
     })
     
     try {
-      const uri = 'http://127.0.0.1:8000/api/v1/posts'
+      const uri = 'https://onomation.onrender.com/api/v1/posts'
       const idToken = await auth.currentUser.getIdToken(true)
       console.log(postData);
       await axios.post(uri, { 
@@ -88,7 +88,7 @@ function Form() {
 
       localStorage.setItem('openai_api_key', openAIAPIKey);
 
-      const uri = encodeURI(`http://127.0.0.1:8000/api/v1/gpt?text=${originalText}`)
+      const uri = encodeURI(`https://onomation.onrender.com/api/v1/gpt?text=${originalText}`)
       const res = await axios.post(uri, {
         openai_api_key: openAIAPIKey
       })
